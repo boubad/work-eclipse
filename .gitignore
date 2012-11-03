@@ -1,0 +1,46 @@
+**/*.obj
+**/*.a
+**/*.exe
+**/*.h5
+**/*.hdf5
+**/*.nc
+**/*~
+.metadata/**
+**/bin/**
+**/tmp/**
+tmp/**/*
+**/*.tmp
+**/*.bak
+**/*.swp
+**/*~.nib
+**/local.properties
+**/.classpath
+**/.settings/
+**/.loadpath
+
+# External tool builders
+**/.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+**/*.launch
+
+# CDT-specific
+**/.cproject
+**/.project
+
+# PDT-specific
+**/.buildpath
+
+#ignore thumbnails created by windows
+**/Thumbs.db
+**/[Bb]in
+**/[Dd]ebug*/**
+**/[Pp]ofile/**
+**/[Cc]overage/**
+**/*.lib
+**/*.sbr
+**/obj/
+**/[Rr]elease*/**
+**/_ReSharper*/**
+**/[Tt]est[Rr]esult*/**
+
