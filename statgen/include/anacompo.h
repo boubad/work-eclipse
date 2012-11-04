@@ -8,6 +8,8 @@
 #ifndef ANACOMPO_H_
 #define ANACOMPO_H_
 /////////////////////////////
+#include "dataport.h"
+////////////////////////
 #include <cassert>
 #include <vector>
 #include <algorithm>

@@ -8,6 +8,8 @@
 #ifndef STATTEST_H_
 #define STATTEST_H_
 /////////////////////////////
+#include "dataport.h"
+///////////////////////////
 #include <cassert>
 #include <cmath>
 #include <string>

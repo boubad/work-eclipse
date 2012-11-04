@@ -8,6 +8,7 @@
 #ifndef EIGEN_H_
 #define EIGEN_H_
 //////////////////////////
+#include "dataport.h"
 #include <cstdlib>
 /////////////////////////////////////////
 namespace statdata {

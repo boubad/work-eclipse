@@ -1,1 +1,12 @@
-Projets Eclipse
+Projet Eclipse statgen
+External dependencies:
+	boost c++ library (headears only)
+	eigen3 c++ template library
+Functions:
+	Statistics Distributions
+	Univar Statistics
+	Correlations
+	Cvs reader
+	Stat tests
+	Minimal Path
+	Hierachical aggregation	
