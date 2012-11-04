@@ -9,7 +9,6 @@
 #define HDF5ATTRIBUTE_H_
 //////////////////////////////
 #include "hdf5object.h"
-#include "value.h"
 ////////////////////////////////
 namespace statdata {
 namespace hdf5 {
@@ -31,7 +30,7 @@ public:
 	virtual bool get_datasets_names(std::vector<std::string> &oNames) const;
 	virtual bool get_attributes_names(std::vector<std::string> &oNames) const;
 public:
-	bool get_info(statdata::hdf5::HDF5Object::DataType &type, size_t &nSize,
+	bool get_info(statdata::DataType &type, size_t &nSize,
 			bool &bScalar) const;
 	//
 	bool write_scalar_any(const boost::any &v);

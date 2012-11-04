@@ -9,7 +9,7 @@
 #define HDF5DATASET_H_
 ////////////////////////////
 #include "hdf5object.h"
-#include "value.h"
+////////////////////////////
 #include "../statindiv.h"
 #include "../statcorrel.h"
 /////////////////////////////////
@@ -34,7 +34,7 @@ public:
 public:
 	bool set_comment(const std::string &s);
 	bool get_comment(std::string &s);
-	bool get_info(HDF5Object::DataType &type, std::valarray<size_t> &dims);
+	bool get_info(statdata::DataType &type, std::valarray<size_t> &dims);
 public:
 	bool write_any(const std::vector<boost::any> &data,
 			const std::valarray<size_t> &oCount);
@@ -230,7 +230,7 @@ public:
 		return (true);
 	} // read_indivs
 protected:
-	bool create(HDF5Object::DataType xtype, size_t nRank, const size_t *dims);
+	bool create(statdata::DataType xtype, size_t nRank, const size_t *dims);
 	bool open(void);
 private:
 	static const size_t MAX_STRINGLEN;

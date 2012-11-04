@@ -23,7 +23,7 @@ namespace hdf5 {
 class Helpers {
 public:
 	static bool my_conv_type(const boost::any &v, hid_t &rtype);
-	static bool my_get_type(hid_t inType, statdata::hdf5::HDF5Object::DataType &rtype);
+	static bool my_get_type(hid_t inType, statdata::DataType &rtype);
 public:
 	static const char HDF5_FILL_CHAR;
 	static const signed char HDF5_FILL_SCHAR;

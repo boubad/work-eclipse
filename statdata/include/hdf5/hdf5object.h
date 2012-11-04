@@ -7,6 +7,9 @@
 
 #ifndef HDF5OBJECT_H_
 #define HDF5OBJECT_H_
+///////////////////////////////////////////
+#include <dataport.h>
+#include <value.h>
 /////////////////////////////////////////
 #include <cassert>
 #include <ctime>
@@ -37,27 +40,6 @@ class HDF5Object {
 	friend class HDF5Group;
 	friend class HDF5Dataset;
 	friend class HDF5DataType;
-public:
-	typedef enum {
-		typeOther,
-		typeChar,
-		typeSChar,
-		typeByte,
-		typeShort,
-		typeUShort,
-		typeInt,
-		typeUInt,
-		typeLong,
-		typeULong,
-		typeLongLong,
-		typeULongLong,
-		typeFloat,
-		typeDouble,
-		typeLongDouble,
-		typeString,
-		typeStatIndiv,
-		typeStatCorrel
-	} DataType;
 public:
 	virtual ~HDF5Object();
 protected:

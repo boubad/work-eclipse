@@ -27,6 +27,16 @@ tmp/**/*
 **/.settings/
 **/.loadpath
 
+# Visal Studio
+**/ipch/**
+**/x64/**
+**/.svn/**
+**/*.sdf
+**/*.sln
+**/*.suo
+**/*.vcxproj
+**/*.filters
+
 # External tool builders
 **/.externalToolBuilders/
 
@@ -42,13 +52,14 @@ tmp/**/*
 
 #ignore thumbnails created by windows
 **/Thumbs.db
-**/[Bb]in
+**/[Bb]in/**
 **/[Dd]ebug*/**
 **/[Pp]ofile/**
 **/[Cc]overage/**
 **/*.lib
+**/*.pdb
 **/*.sbr
-**/obj/
+**/obj/**
 **/[Rr]elease*/**
 **/_ReSharper*/**
 **/[Tt]est[Rr]esult*/**

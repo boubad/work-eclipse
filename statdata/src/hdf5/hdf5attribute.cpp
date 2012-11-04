@@ -27,7 +27,7 @@ HDF5Attribute::HDF5Attribute(HDF5Dataset *pParent, const std::string &name) :
 HDF5Attribute::~HDF5Attribute() {
 	this->close();
 }
-bool HDF5Attribute::get_info(statdata::hdf5::HDF5Object::DataType &type,
+bool HDF5Attribute::get_info(statdata::DataType &type,
 		size_t &nSize, bool &bScalar) const {
 	type = typeOther;
 	nSize = 0;
@@ -640,7 +640,7 @@ bool HDF5Attribute::read_scalar_any(boost::any &v) {
 	if (xtype < 0) {
 		return (false);
 	}
-	HDF5Object::DataType type = typeOther;
+	DataType type = typeOther;
 	Helpers::my_get_type(xtype, type);
 	::H5Tclose(xtype);
 	//
@@ -805,7 +805,7 @@ bool HDF5Attribute::read_vector_any(std::vector<boost::any> &oVec) {
 	if (xtype < 0) {
 		return (false);
 	}
-	HDF5Object::DataType type = typeOther;
+	DataType type = typeOther;
 	Helpers::my_get_type(xtype, type);
 	::H5Tclose(xtype);
 	hid_t hspace = ::H5Aget_space(id);
