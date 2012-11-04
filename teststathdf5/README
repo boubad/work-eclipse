@@ -1,1 +1,18 @@
-Projets Eclipse
+Projets teststathdf5
+
+Description:
+        Libraries statdata and statgen tests
+
+Dependencies:
+            projects statgen, statdata
+
+External dependencies:
+            gtest, hdh5 library, posix threads (linux)
+
+Global compiler switches:
+            -std=c++11 or -std=c++0x
+            -fopenmp
+Global include directories:
+            ../statgen/include
+            ../statdata/include
+

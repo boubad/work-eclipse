@@ -13,7 +13,7 @@ class HDF5NumAttributeTest : public ::testing::Test {
 public:
 	typedef std::vector<T> Vector;
 public:
-	HDF5NumAttributeTest():m_filename("mytest.h5"),m_grpname("g_initial"){}
+	HDF5NumAttributeTest():m_filename("testresults/mytest.h5"),m_grpname("g_initial"){}
 	virtual ~HDF5NumAttributeTest(){}
  protected:
   T value_;

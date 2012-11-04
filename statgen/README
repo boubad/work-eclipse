@@ -1,4 +1,7 @@
-Projet Eclipse statgen
+Projet  statgen
+
+C++ Standard: c++11 (or c++0x)
+
 External dependencies:
 	boost c++ library (headears only)
 	eigen3 c++ template library
@@ -10,3 +13,6 @@ Functions:
 	Stat tests
 	Minimal Path
 	Hierachical aggregation	
+
+Compiling details:
+        Linux --> -I/usr/include/eigen3

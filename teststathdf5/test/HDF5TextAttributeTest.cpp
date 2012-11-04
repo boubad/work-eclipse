@@ -11,7 +11,7 @@
 /////////////////////////////
 class HDF5TextAttributeTest : public ::testing::Test {
 public:
-	HDF5TextAttributeTest():m_filename("mytest.h5"),m_grpname("g_initial"){}
+	HDF5TextAttributeTest():m_filename("testresults/mytest.h5"),m_grpname("g_initial"){}
 	virtual ~HDF5TextAttributeTest(){}
  protected:
   std::string m_filename;

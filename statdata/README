@@ -1,1 +1,16 @@
-Projets Eclipse
+Projets statdata
+
+Description:
+        hdf5 storage of statistical datasets
+
+Dependencies:
+            project statgen
+
+External dependencies:
+            hdh5 library
+
+Global compiler switches:
+            -std=c++11 or -std=c++0x
+            -fopenmp
+Global include directories:
+            ../statgen/include

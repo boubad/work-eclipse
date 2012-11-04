@@ -16,7 +16,7 @@ using namespace statdata::hdf5;
 class HDF5FileTest: public ::testing::Test {
 public:
 	HDF5FileTest() :
-			m_filename("mytest.h5"), m_grpname("g_initial"),m_datasetname("testdataset") {
+			m_filename("testresults/mytest.h5"), m_grpname("g_initial"),m_datasetname("testdataset") {
 	}
 	virtual ~HDF5FileTest() {
 	}
