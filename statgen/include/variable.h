@@ -11,11 +11,7 @@
 #include "dataport.h"
 ////////////////////////////////////
 #include <string>
-#include <memory>
 /////////////////////////////////////////
-#include <vector>
-#include <map>
-//////////////////////////////////////
 namespace statdata {
     /////////////////////////////////////
 
@@ -58,15 +54,15 @@ namespace statdata {
         }
 
         bool operator<(const Variable &other) const {
-            return (this->m_index < other.m_index);
+            return (this->m_id < other.m_id);
         }
 
         bool operator==(const Variable &other) const {
-            return (this->m_index == other.m_index);
+            return (this->m_id == other.m_id);
         }
 
         bool operator!=(const Variable &other) const {
-            return (this->m_index != other.m_index);
+            return (this->m_id != other.m_id);
         }
     public:
 
@@ -82,7 +78,7 @@ namespace statdata {
             return (this->m_isactive);
         }
 
-        bool set_active_var(bool b = true) {
+        void set_active_var(bool b = true) {
             this->m_isactive = b;
         }
 
@@ -144,7 +140,7 @@ namespace statdata {
             return (this->m_isweight);
         }
 
-        bool set_weight_var(bool b = true) {
+        void set_weight_var(bool b = true) {
             this->m_isweight = b;
             if (this->m_isweight) {
                 this->m_iscateg = false;
@@ -180,7 +176,6 @@ namespace statdata {
         std::string m_name;
     }; // class Variable
     typedef Variable *PVariable;
-    typedef std::shared_ptr<Variable> VariablePtr;
     ////////////////////////////////////////
 
     class Individu {
@@ -214,15 +209,15 @@ namespace statdata {
         }
 
         bool operator<(const Individu &other) const {
-            return (this->m_index < other.m_index);
+            return (this->m_id < other.m_id);
         }
 
         bool operator==(const Individu &other) const {
-            return (this->m_index == other.m_index);
+            return (this->m_id == other.m_id);
         }
 
         bool operator!=(const Individu &other) const {
-            return (this->m_index != other.m_index);
+            return (this->m_id != other.m_id);
         }
     public:
 
@@ -238,7 +233,7 @@ namespace statdata {
             return (this->m_isactive);
         }
 
-        bool set_active_ind(bool b = true) {
+        void set_active_ind(bool b = true) {
             this->m_isactive = b;
         }
 
@@ -273,7 +268,6 @@ namespace statdata {
         std::string m_name;
     }; // class Individu
     typedef Individu *PIndividu;
-    typedef std::shared_ptr<Individu> IndividuPtr;
     /////////////////////////////////////////
 }// namespace statdata
 ////////////////////////////////////

@@ -13,6 +13,7 @@
 #include <cassert>
 #include <memory>
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <cctype>
 #include <limits>
