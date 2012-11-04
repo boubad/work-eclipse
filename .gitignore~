@@ -10,10 +10,6 @@
 **/*.hdf5
 **/*.nc
 **/*~
-**/*.cbp
-**/*.depend
-**/.layout
-**/*.out
 .metadata/**
 **/bin/**
 **/tmp/**
