@@ -33,34 +33,7 @@
 #define nullptr 0
 #endif
 #endif
+//////////////////////////////////
+#include "datatype.h"
 ///////////////////////////////////
-namespace statdata {
-
-    typedef enum {
-        typeOther,
-        typeChar,
-        typeSChar,
-        typeByte,
-        typeShort,
-        typeUShort,
-        typeInt,
-        typeUInt,
-        typeLong,
-        typeULong,
-        typeLongLong,
-        typeULongLong,
-        typeFloat,
-        typeDouble,
-        typeLongDouble,
-        typeString,
-        typeDate,
-        typeTime,
-        typeBool,
-        typeDateTime,
-        typeStatIndiv,
-        typeStatVariable,
-        typeStatCorrel
-    } DataType;
-}// namespace statdata
-//////////////////////////////
 #endif /* DATAPORT_H_ */
