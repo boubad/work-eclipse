@@ -7,10 +7,11 @@ Dependencies:
             project statgen
 
 External dependencies:
-            boost c++
+            boost c++ (string, serialization)
 
 Global compiler switches:
             -std=c++11 or -std=c++0x
             -fopenmp
+
 Global include directories:
             ../statgen/include

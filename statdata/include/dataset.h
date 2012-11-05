@@ -17,17 +17,387 @@
 #include <vector>
 #include <set>
 #include <map>
+///////////////////////////////////////////
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/map.hpp>
 ////////////////////////////////////////
 namespace statdata {
     //////////////////////////////////
 
     class DataSet {
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void save(Archive & ar, const unsigned int /*version */) const {
+            ar & this->m_vars;
+            ar & this->m_inds;
+            int nvars = (int) this->m_vars.size();
+            ar & nvars;
+            for (int i = 0; i < nvars; ++i) {
+                std::string sid = (this->m_vars[i]).id();
+                statdata::DataType t = (this->m_vars[i]).get_type();
+                int tt = (int) t;
+                ar & sid;
+                ar & tt;
+                switch (t) {
+                    case statdata::typeBool:
+                    {
+                        std::vector<bool> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeSChar:
+                    {
+                        std::vector<signed char> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeByte:
+                    {
+                        std::vector<unsigned char> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeChar:
+                    {
+                        std::vector<char> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeShort:
+                    {
+                        std::vector<short> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeUShort:
+                    {
+                        std::vector<unsigned short> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeInt:
+                    {
+                        std::vector<int> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeUInt:
+                    {
+                        std::vector<unsigned int> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeLong:
+                    {
+                        std::vector<long> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeULong:
+                    {
+                        std::vector<unsigned long> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeLongLong:
+                    {
+                        std::vector<long long> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeULongLong:
+                    {
+                        std::vector<unsigned long long> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeFloat:
+                    {
+                        std::vector<float> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeDouble:
+                    {
+                        std::vector<double> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeLongDouble:
+                    {
+                        std::vector<long double> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeString:
+                    {
+                        std::vector<std::string> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    case statdata::typeWString:
+                    {
+                        std::vector<std::wstring> vv;
+                        this->get_data(sid, vv);
+                        ar & vv;
+                    }
+                        break;
+                    default:
+                        break;
+                }// t
+            }// i
+        }// save
+
+        template<class Archive>
+        void load(Archive & ar, const unsigned int /*version */) {
+            ar & this->m_vars;
+            ar & this->m_inds;
+            int nvars = 0;
+            ar & nvars;
+            for (int i = 0; i < nvars; ++i) {
+                std::string sid;
+                int tt;
+                ar & sid;
+                ar & tt;
+                statdata::DataType t = (statdata::DataType)tt;
+                switch (t) {
+                    case statdata::typeBool:
+                    {
+                        std::vector<bool> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeSChar:
+                    {
+                        std::vector<signed char> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeByte:
+                    {
+                        std::vector<unsigned char> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeChar:
+                    {
+                        std::vector<char> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeShort:
+                    {
+                        std::vector<short> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeUShort:
+                    {
+                        std::vector<unsigned short> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeInt:
+                    {
+                        std::vector<int> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeUInt:
+                    {
+                        std::vector<unsigned int> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeLong:
+                    {
+                        std::vector<long> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeULong:
+                    {
+                        std::vector<unsigned long> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeLongLong:
+                    {
+                        std::vector<long long> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeULongLong:
+                    {
+                        std::vector<unsigned long long> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeFloat:
+                    {
+                        std::vector<float> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeDouble:
+                    {
+                        std::vector<double> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeLongDouble:
+                    {
+                        std::vector<long double> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeString:
+                    {
+                        std::vector<std::string> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    case statdata::typeWString:
+                    {
+                        std::vector<std::wstring> vv;
+                        ar & vv;
+                        size_t nx = vv.size();
+                        std::vector<boost::any> vz(nx);
+                        for (size_t j = 0; j < nx; ++j) {
+                            vz[j] = vv[j];
+                        }
+                        this->m_data[sid] = vz;
+                    }
+                        break;
+                    default:
+                        this->remove_variable(sid);
+                        break;
+                }// t
+            }// i
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
     public:
         DataSet();
         explicit
         DataSet(const std::string &filename);
         explicit
         DataSet(size_t nVars, size_t nRows = 0);
+
         template <class ALLOCV, class ALLOCP>
         DataSet(const std::map<std::string,
         std::vector<boost::any, ALLOCV>,
@@ -250,7 +620,7 @@ namespace statdata {
                         }
                     }// i
                     if (rtype != statdata::typeOther) {
-                        if ((size_t)nInds < n) {
+                        if ((size_t) nInds < n) {
                             nInds = n;
                         }
                         Variable var(varid, rtype);
@@ -274,7 +644,7 @@ namespace statdata {
             }// i
             for (auto it = this->m_data.begin(); it != this->m_data.end(); ++it) {
                 std::vector<boost::any> & vv = (*it).second;
-                if (vv.size() < (size_t)nInds) {
+                if (vv.size() < (size_t) nInds) {
                     vv.resize(nInds);
                 }
             }// it
@@ -301,6 +671,7 @@ namespace statdata {
         std::map<std::string, std::vector<boost::any> > m_data;
         boost::any m_emptyval;
     }; // class DataSet
+   // BOOST_CLASS_VERSION(DataSet, STAT_SERIALZE_VERSION )
     ///////////////////////////////////////
 }// namespace statdata
 /////////////////////////////////////

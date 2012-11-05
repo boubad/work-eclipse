@@ -13,11 +13,52 @@
 #include <string>
 /////////////////////////////
 #include <boost/algorithm/string.hpp>
+////////////////////////////////////////
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/split_member.hpp>
+#include <boost/serialization/string.hpp>
+///////////////////////////////////////////
+#define STAT_SERIALZE_VERSION   1
 /////////////////////////////////////////
 namespace statdata {
     /////////////////////////////////////
 
     class Variable {
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void save(Archive & ar, const unsigned int /*version */) const {
+            // note, version is always the latest when saving
+            ar & this->m_index;
+            ar & this->m_isactive;
+            ar & this->m_iscateg;
+            ar & this->m_isid;
+            ar & this->m_isname;
+            ar & this->m_isweight;
+            int t = (int) this->m_type;
+            ar & t;
+            ar & this->m_id;
+            ar & this->m_name;
+        }
+
+        template<class Archive>
+        void load(Archive & ar, const unsigned int version) {
+            ar & this->m_index;
+            ar & this->m_isactive;
+            ar & this->m_iscateg;
+            ar & this->m_isid;
+            ar & this->m_isname;
+            ar & this->m_isweight;
+            int t;
+            ar & t;
+            this->m_type = (statdata::DataType)t;
+            ar & this->m_id;
+            ar & this->m_name;
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
     public:
 
         Variable() : m_index(-1), m_isactive(true), m_iscateg(false), m_isid(false), m_isname(false),
@@ -67,12 +108,15 @@ namespace statdata {
             return (this->m_id != other.m_id);
         }
     public:
+
         statdata::DataType get_type(void) const {
             return (this->m_type);
         }
-        void set_type(statdata::DataType t){
+
+        void set_type(statdata::DataType t) {
             this->m_type = t;
         }
+
         int index(void) const {
             return (this->m_index);
         }
@@ -183,9 +227,23 @@ namespace statdata {
         std::string m_name;
     }; // class Variable
     typedef Variable *PVariable;
+
+  //  BOOST_CLASS_VERSION(statdata::Variable, STAT_SERIALZE_VERSION )
+
     ////////////////////////////////////////
 
     class Individu {
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int /*version */) {
+            ar & this->m_index;
+            ar & this->m_isactive;
+            ar & this-> m_issup;
+            ar & this-> m_id;
+            ar & this-> m_name;
+        }
     public:
 
         Individu() : m_index(-1), m_isactive(true), m_issup(false) {
@@ -257,7 +315,7 @@ namespace statdata {
         }
 
         void id(const std::string &s) {
-             this->m_id = boost::to_lower_copy(boost::trim_copy(s));
+            this->m_id = boost::to_lower_copy(boost::trim_copy(s));
         }
 
         const std::string &name(void) const {
@@ -274,6 +332,7 @@ namespace statdata {
         std::string m_id;
         std::string m_name;
     }; // class Individu
+  //  BOOST_CLASS_VERSION(Individu,STAT_SERIALZE_VERSION )
     typedef Individu *PIndividu;
     /////////////////////////////////////////
 }// namespace statdata
