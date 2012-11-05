@@ -46,6 +46,157 @@ namespace statdata {
         this->m_vars.clear();
     }// clear
 
+    bool DataSet::change_variable_type(const std::string &sId, statdata::DataType rtype) {
+        std::string sid = boost::to_lower_copy(boost::trim_copy(sId));
+        if (sid.empty()) {
+            return (false);
+        }
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            Variable &v = *it;
+            std::string s = v.id();
+            if ((s == sId) && (this->m_data.find(sid) != this->m_data.end())) {
+                std::vector<boost::any> &vv = this->m_data[sid];
+                size_t n = vv.size();
+                for (size_t i = 0; i < n; ++i) {
+                    boost::any & v = vv[i];
+                    if (!v.empty()) {
+                        if (rtype == statdata::typeBool) {
+                            bool bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeChar) {
+                            char bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeSChar) {
+                            signed char bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeByte) {
+                            unsigned char bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeShort) {
+                            short bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeUShort) {
+                            unsigned short bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeInt) {
+                            int bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeUInt) {
+                            unsigned int bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeLong) {
+                            long bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeULong) {
+                            unsigned long bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeLongLong) {
+                            long long bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeULongLong) {
+                            unsigned long long bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeFloat) {
+                            float bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeDouble) {
+                            double bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeLongDouble) {
+                            long double bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        } else if (rtype == statdata::typeString) {
+                            std::string bval;
+                            if (Value::get_value(v, bval)) {
+                                vv[i] = bval;
+                            } else {
+                                vv[i] = boost::any();
+                            }
+                        }
+                    }// not empty
+                }// i
+                v.set_type(rtype);
+                return (true);
+            }
+        }// it
+        return (false);
+    }// change_variable_type
+
+    statdata::DataType DataSet::get_variable_type(const std::string &sId) {
+        std::string sid = boost::to_lower_copy(boost::trim_copy(sId));
+        if (sid.empty()) {
+            return (statdata::typeOther);
+        }
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            Variable &v = *it;
+            std::string s = v.id();
+            if ((s == sId) && (this->m_data.find(sid) != this->m_data.end())) {
+                return (v.get_type());
+            }
+        }// it
+        return (statdata::typeOther);
+    }//get_variable_type
+
     void DataSet::initialize(size_t nVars, size_t nRows) {
         this->clear();
         //
@@ -59,7 +210,7 @@ namespace statdata {
             std::vector<boost::any> vv;
             if (nRows > 0) {
                 vv.resize(nRows);
-                for (int i = 0; i < (int)nRows; ++i) {
+                for (int i = 0; i < (int) nRows; ++i) {
                     std::stringstream os;
                     os << "ind" << (i + 1);
                     std::string sid = os.str();
@@ -83,7 +234,7 @@ namespace statdata {
             std::vector<boost::any> vv;
             if (nRows > 0) {
                 vv.resize(nRows);
-                for (int i = 0; i < (int)nRows; ++i) {
+                for (int i = 0; i < (int) nRows; ++i) {
                     std::stringstream os;
                     os << "individu" << (i + 1);
                     std::string sid = os.str();
@@ -105,7 +256,7 @@ namespace statdata {
             if (nRows > 0) {
                 vv.resize(nRows);
                 double dval = 1.0;
-                for (int i = 0; i < (int)nRows; ++i) {
+                for (int i = 0; i < (int) nRows; ++i) {
                     vv[i] = dval;
                 }// i
             }// Rows

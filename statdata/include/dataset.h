@@ -280,6 +280,8 @@ namespace statdata {
             }// it
         }// set_all_data
         void initialize(size_t nVars, size_t nRows);
+        bool change_variable_type(const std::string &sId, statdata::DataType rtype);
+        statdata::DataType get_variable_type(const std::string &sId);
     public:
 
         boost::any operator()(int indindex, int varindex) {

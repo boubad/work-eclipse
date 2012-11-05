@@ -67,7 +67,12 @@ namespace statdata {
             return (this->m_id != other.m_id);
         }
     public:
-
+        statdata::DataType get_type(void) const {
+            return (this->m_type);
+        }
+        void set_type(statdata::DataType t){
+            this->m_type = t;
+        }
         int index(void) const {
             return (this->m_index);
         }
