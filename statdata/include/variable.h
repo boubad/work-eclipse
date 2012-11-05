@@ -11,6 +11,8 @@
 #include "dataport.h"
 ////////////////////////////////////
 #include <string>
+/////////////////////////////
+#include <boost/algorithm/string.hpp>
 /////////////////////////////////////////
 namespace statdata {
     /////////////////////////////////////
@@ -154,7 +156,7 @@ namespace statdata {
         }
 
         void id(const std::string &s) {
-            this->m_id = s;
+            this->m_id = boost::to_lower_copy(boost::trim_copy(s));
         }
 
         const std::string &name(void) const {
@@ -250,7 +252,7 @@ namespace statdata {
         }
 
         void id(const std::string &s) {
-            this->m_id = s;
+             this->m_id = boost::to_lower_copy(boost::trim_copy(s));
         }
 
         const std::string &name(void) const {

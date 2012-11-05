@@ -18,6 +18,10 @@ namespace statdata {
         this->import_csv_file(filename);
     }
 
+    DataSet::DataSet(size_t nVars, size_t nRows) {
+        this->initialize(nVars, nRows);
+    }// DataSet
+
     DataSet::DataSet(const DataSet &other) : m_vars(other.m_vars),
     m_inds(other.m_inds), m_data(other.m_data) {
 
@@ -42,6 +46,195 @@ namespace statdata {
         this->m_vars.clear();
     }// clear
 
+    void DataSet::initialize(size_t nVars, size_t nRows) {
+        this->clear();
+        //
+        {
+            std::string sIdVar("ids");
+            Variable var1(sIdVar, statdata::typeString);
+            var1.index(0);
+            var1.set_categ_var(true);
+            var1.set_id_var(true);
+            this->m_vars.push_back(var1);
+            std::vector<boost::any> vv;
+            if (nRows > 0) {
+                vv.resize(nRows);
+                for (int i = 0; i < (int)nRows; ++i) {
+                    std::stringstream os;
+                    os << "ind" << (i + 1);
+                    std::string sid = os.str();
+                    vv[i] = sid;
+                    Individu ind(sid);
+                    ind.index(i);
+                    this->m_inds.push_back(ind);
+                }// i
+            }// Rows
+            std::string sx = var1.id();
+            this->m_data[sx] = vv;
+        }
+        //
+        {
+            std::string sNameVar("names");
+            Variable var2(sNameVar, statdata::typeString);
+            var2.index(1);
+            var2.set_categ_var(true);
+            var2.set_name_var(true);
+            this->m_vars.push_back(var2);
+            std::vector<boost::any> vv;
+            if (nRows > 0) {
+                vv.resize(nRows);
+                for (int i = 0; i < (int)nRows; ++i) {
+                    std::stringstream os;
+                    os << "individu" << (i + 1);
+                    std::string sid = os.str();
+                    vv[i] = sid;
+                }// i
+            }// Rows
+            std::string sx = var2.id();
+            this->m_data[sx] = vv;
+        }
+        //
+        {
+            std::string sWVar("weights");
+            Variable var3(sWVar, statdata::typeDouble);
+            var3.index(2);
+            var3.set_num_var(true);
+            var3.set_weight_var(true);
+            this->m_vars.push_back(var3);
+            std::vector<boost::any> vv;
+            if (nRows > 0) {
+                vv.resize(nRows);
+                double dval = 1.0;
+                for (int i = 0; i < (int)nRows; ++i) {
+                    vv[i] = dval;
+                }// i
+            }// Rows
+            std::string sx = var3.id();
+            this->m_data[sx] = vv;
+        }
+        //
+        for (size_t i = 0; i < nVars; ++i) {
+            std::stringstream os;
+            os << "var" << (i + 1);
+            std::string sid = os.str();
+            Variable varx(sid, statdata::typeDouble);
+            varx.index((int) this->m_vars.size());
+            varx.set_num_var(true);
+            this->m_vars.push_back(varx);
+            std::vector<boost::any> vv;
+            if (nRows > 0) {
+                vv.resize(nRows);
+            }// Rows
+            std::string sx = varx.id();
+            this->m_data[sx] = vv;
+        }// i
+    }// initialize
+
+    bool DataSet::set_ids_variable(const std::string &sId) {
+        std::string sid = boost::trim_copy(sId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        bool bRet = false;
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            Variable &v = *it;
+            std::string s = boost::trim_copy(v.id());
+            std::string ss = boost::to_lower_copy(s);
+            if (ss == sx) {
+                v.set_categ_var(true);
+                v.set_id_var(true);
+                bRet = true;
+            } else {
+                v.set_id_var(false);
+            }
+        }// it
+        return (bRet);
+    }// set_ids_variable
+
+    bool DataSet::set_names_variable(const std::string &sId) {
+        std::string sid = boost::trim_copy(sId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        bool bRet = false;
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            Variable &v = *it;
+            std::string s = boost::trim_copy(v.id());
+            std::string ss = boost::to_lower_copy(s);
+            if (ss == sx) {
+                v.set_categ_var(true);
+                v.set_name_var(true);
+                bRet = true;
+            } else {
+                v.set_name_var(false);
+            }
+        }// it
+        return (bRet);
+    }// set_names_variable
+
+    bool DataSet::set_weights_variable(const std::string &sId) {
+        std::string sid = boost::trim_copy(sId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        bool bRet = false;
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            Variable &v = *it;
+            std::string s = boost::trim_copy(v.id());
+            std::string ss = boost::to_lower_copy(s);
+            if (ss == sx) {
+                v.set_num_var(true);
+                v.set_weight_var(true);
+                bRet = true;
+            } else {
+                v.set_weight_var(false);
+            }
+        }// it
+        return (bRet);
+    }// set_weights_variable
+
+    bool DataSet::get_ids_variable(std::string &sId) const {
+        sId.clear();
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            const Variable &v = *it;
+            if (v.is_id_var()) {
+                std::string s = boost::trim_copy(v.id());
+                sId = boost::to_lower_copy(s);
+                return (true);
+            }
+        }// it
+        return (false);
+    }// get_ids_variable
+
+    bool DataSet::get_names_variable(std::string &sId) const {
+        sId.clear();
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            const Variable &v = *it;
+            if (v.is_name_var()) {
+                std::string s = boost::trim_copy(v.id());
+                sId = boost::to_lower_copy(s);
+                return (true);
+            }
+        }// it
+        return (false);
+    }// get_names_variable
+
+    bool DataSet::get_weights_variable(std::string &sId) const {
+        sId.clear();
+        for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
+            const Variable &v = *it;
+            if (v.is_weight_var()) {
+                std::string s = boost::trim_copy(v.id());
+                sId = boost::to_lower_copy(s);
+                return (true);
+            }
+        }// it
+        return (false);
+    }// get_weights_variable
+
     bool DataSet::indiv_data(const std::string &sId, std::map<std::string,
             boost::any> &oMap) {
         oMap.clear();
@@ -61,7 +254,7 @@ namespace statdata {
     }// indiv_data
 
     bool DataSet::indiv_data(int indindex, std::map<std::string,
-            boost::any> &oMap)  {
+            boost::any> &oMap) {
         oMap.clear();
         if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
             return (false);
@@ -78,7 +271,7 @@ namespace statdata {
     }// indiv_data
 
     bool DataSet::get_value(const std::string &sIndId, const std::string &sVarId,
-            boost::any &val)  {
+            boost::any &val) {
         val = boost::any();
         int indindex = this->get_indiv_index(sIndId);
         if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
@@ -122,7 +315,7 @@ namespace statdata {
         return (false);
     }// set_value
 
-    bool DataSet::get_value(int indindex, int varindex, boost::any &val)  {
+    bool DataSet::get_value(int indindex, int varindex, boost::any &val) {
         if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
             return (false);
         }
@@ -414,58 +607,7 @@ namespace statdata {
         if (!CSVReader::read_csv_file(filename, oMap)) {
             return (false);
         }
-        this->clear();
-        size_t nr = 0;
-        for (auto it = oMap.begin(); it != oMap.end(); ++it) {
-            std::string sId = (*it).first;
-            std::string sid = boost::trim_copy(boost::to_lower_copy(sId));
-            if (sid.empty()) {
-                continue;
-            }
-            const std::vector<boost::any> vv = (*it).second;
-            size_t n = vv.size();
-            if (nr == 0) {
-                nr = n;
-            }
-            statdata::DataType rtype = statdata::typeOther;
-            for (size_t i = 0; i < n; ++i) {
-                const boost::any &vx = vv[i];
-                if (!vx.empty()) {
-                    rtype = Value::get_type(vx);
-                    break;
-                }
-            }// i
-            if (rtype == statdata::typeOther) {
-                continue;
-            }
-            Variable var(sid, rtype);
-            var.name(sId);
-            if ((rtype == statdata::typeBool) || (rtype == statdata::typeString)) {
-                var.set_categ_var(true);
-            }
-            var.index((int) this->m_vars.size());
-            this->m_vars.push_back(var);
-            this->m_data[sid] = vv;
-        }// it
-        this->m_inds.resize(nr);
-        for (size_t i = 0; i < nr; ++i) {
-            std::string sid;
-            std::string sname;
-            {
-                std::stringstream os;
-                os << "I" << (i + 1);
-                sid = os.str();
-            }
-            {
-                std::stringstream os;
-                os << "INDIVIDU" << (i + 1);
-                sname = os.str();
-            }
-            Individu &ind = this->m_inds[i];
-            ind.id(sid);
-            ind.name(sname);
-            ind.index((int) i);
-        }// i
+        this->set_all_data(oMap);
         return (true);
     }// import_csv_file
     /////////////////////////////////////
