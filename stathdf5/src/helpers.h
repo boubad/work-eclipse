@@ -9,7 +9,7 @@
 #define HELPERS_H_
 //////////////////////////////////
 #include <boost/any.hpp>
-#include "../../include/hdf5/hdf5object.h"
+#include "../include/hdf5object.h"
 //////////////////////////////////////
 #ifdef _MSC_VER
 #include <hdf5/hdf5.h>

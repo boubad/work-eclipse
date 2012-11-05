@@ -4,7 +4,7 @@
  *  Created on: 14 oct. 2012
  *      Author: boubad
  */
-#include "../../include/hdf5/hdf5file.h"
+#include "../include/hdf5file.h"
 ////////////////////////////
 #include "helpers.h"
 //////////////////////

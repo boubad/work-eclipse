@@ -8,7 +8,7 @@
 #ifndef HDF5STATINDIVTYPE_H_
 #define HDF5STATINDIVTYPE_H_
 ////////////////////////////////////
-#include "../statindiv.h"
+#include "statindiv.h"
 #include "hdf5datatype.h"
 //////////////////////////////////
 namespace statdata {

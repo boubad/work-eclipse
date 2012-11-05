@@ -8,7 +8,8 @@
 #ifndef DATASET_H
 #define	DATASET_H
 ////////////////////////////////
-#include "value.h"
+#include <value.h>
+////////////////////////////////
 #include "variable.h"
 /////////////////////////
 #include <vector>
@@ -60,7 +61,10 @@ namespace statdata {
         }
         //
         std::vector<boost::any> * variable_data(const std::string &sId);
-        bool indiv_data(const std::string &sId, std::map<std::string,boost::any> &oMap);
+        bool indiv_data(const std::string &sId, 
+        std::map<std::string,boost::any> &oMap);
+        bool indiv_data(int indindex, 
+        std::map<std::string,boost::any> &oMap);
         bool get_value(const std::string &sIndId, const std::string &sVarId,
         boost::any &val);
         bool set_value(const std::string &sIndId, const std::string &sVarId,
@@ -68,12 +72,22 @@ namespace statdata {
         bool get_value(int iIndIndex, int iVarIndex,boost::any &val);
         bool set_value(int iIndIndex, int iVarIndex, const boost::any &val);
     public:
+        boost::any operator()(int indindex, int varindex){
+            boost::any v;
+            if (this->get_value(indindex,varindex,v)){
+                return (v);
+            } else {
+                return (this->m_emptyval);
+            }
+        }
+    public:
         void clear(void);
         bool import_csv_file(const std::string &filename);
     protected:
         std::vector<Variable> m_vars;
         std::vector<Individu> m_inds;
         std::map<std::string,std::vector<boost::any> > m_data;
+        boost::any  m_emptyval;
     };// class DataSet
     ///////////////////////////////////////
 }// namespace statdata

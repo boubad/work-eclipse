@@ -1,13 +1,13 @@
 Projets statdata
 
 Description:
-        hdf5 storage of statistical datasets
+        storage of statistical datasets
 
 Dependencies:
             project statgen
 
 External dependencies:
-            hdh5 library
+            boost c++
 
 Global compiler switches:
             -std=c++11 or -std=c++0x

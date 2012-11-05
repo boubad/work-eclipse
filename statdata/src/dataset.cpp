@@ -1,7 +1,7 @@
 // dataset.cpp
 //////////////////////////
 #include "../include/dataset.h"
-#include "../include/csvreader.h"
+#include <csvreader.h>
 //////////////////////////////////
 #include <algorithm>
 #include <sstream>
@@ -41,6 +41,134 @@ namespace statdata {
         this->m_inds.clear();
         this->m_vars.clear();
     }// clear
+
+    bool DataSet::indiv_data(const std::string &sId, std::map<std::string,
+            boost::any> &oMap) {
+        oMap.clear();
+        int indindex = this->get_indiv_index(sId);
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        for (auto it = this->m_data.begin(); it != this->m_data.end(); ++it) {
+            std::string varid = (*it).first;
+            const std::vector<boost::any> &vv = (*it).second;
+            if (indindex < (int) vv.size()) {
+                boost::any v = vv[indindex];
+                oMap[varid] = v;
+            }
+        }// it
+        return (true);
+    }// indiv_data
+
+    bool DataSet::indiv_data(int indindex, std::map<std::string,
+            boost::any> &oMap)  {
+        oMap.clear();
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        for (auto it = this->m_data.begin(); it != this->m_data.end(); ++it) {
+            std::string varid = (*it).first;
+            const std::vector<boost::any> &vv = (*it).second;
+            if (indindex < (int) vv.size()) {
+                boost::any v = vv[indindex];
+                oMap[varid] = v;
+            }
+        }// it
+        return (true);
+    }// indiv_data
+
+    bool DataSet::get_value(const std::string &sIndId, const std::string &sVarId,
+            boost::any &val)  {
+        val = boost::any();
+        int indindex = this->get_indiv_index(sIndId);
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        std::string sid = boost::trim_copy(sVarId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        if (this->m_data.find(sx) == this->m_data.end()) {
+            return (false);
+        }
+        auto vv = this->m_data[sx];
+        if (indindex < (int) vv.size()) {
+            val = vv[indindex];
+            return (true);
+        }
+        return (false);
+    }// get_value
+
+    bool DataSet::set_value(const std::string &sIndId, const std::string &sVarId,
+            const boost::any &val) {
+        int indindex = this->get_indiv_index(sIndId);
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        std::string sid = boost::trim_copy(sVarId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        if (this->m_data.find(sx) == this->m_data.end()) {
+            return (false);
+        }
+        std::vector<boost::any> &vv = this->m_data[sx];
+        if (indindex < (int) vv.size()) {
+            vv[indindex] = val;
+            return (true);
+        }
+        return (false);
+    }// set_value
+
+    bool DataSet::get_value(int indindex, int varindex, boost::any &val)  {
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        if ((varindex < 0) || (varindex >= (int) this->m_vars.size())) {
+            return (false);
+        }
+        std::string sId = (this->m_vars[varindex]).id();
+        std::string sid = boost::trim_copy(sId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        if (this->m_data.find(sx) == this->m_data.end()) {
+            return (false);
+        }
+        std::vector<boost::any> &vv = this->m_data[sx];
+        if (indindex < (int) vv.size()) {
+            val = vv[indindex];
+            return (true);
+        }
+        return (false);
+    }// get_value
+
+    bool DataSet::set_value(int indindex, int varindex, const boost::any &val) {
+        if ((indindex < 0) || (indindex >= (int) this->m_inds.size())) {
+            return (false);
+        }
+        if ((varindex < 0) || (varindex >= (int) this->m_vars.size())) {
+            return (false);
+        }
+        std::string sId = (this->m_vars[varindex]).id();
+        std::string sid = boost::trim_copy(sId);
+        if (sid.empty()) {
+            return (false);
+        }
+        std::string sx = boost::to_lower_copy(sid);
+        if (this->m_data.find(sx) == this->m_data.end()) {
+            return (false);
+        }
+        std::vector<boost::any> &vv = this->m_data[sx];
+        if (indindex < (int) vv.size()) {
+            vv[indindex] = val;
+            return (true);
+        }
+        return (false);
+    }// set_value
 
     void DataSet::get_variables_ids(std::vector<std::string> &names) const {
         names.clear();
@@ -82,18 +210,20 @@ namespace statdata {
         }
         return (nullptr);
     }// get_variable
-    std::vector<boost::any> * DataSet::variable_data(const std::string &sId){
-         std::string sid = boost::trim_copy(sId);
+
+    std::vector<boost::any> * DataSet::variable_data(const std::string &sId) {
+        std::string sid = boost::trim_copy(sId);
         if (sid.empty()) {
             return (nullptr);
         }
         std::string sx = boost::to_lower_copy(sid);
         auto it = this->m_data.find(sx);
-        if (it != this->m_data.end()){
+        if (it != this->m_data.end()) {
             return (&(this->m_data[sx]));
         }
         return (nullptr);
     }// variable_data
+
     const Variable *DataSet::get_variable(const std::string &sId) const {
         std::string sid = boost::trim_copy(sId);
         if (sid.empty()) {
@@ -280,61 +410,61 @@ namespace statdata {
     }
 
     bool DataSet::import_csv_file(const std::string & filename) {
-        std::map<std::string,std::vector<boost::any> > oMap;
-        if (!CSVReader::read_csv_file(filename,oMap)){
+        std::map<std::string, std::vector<boost::any> > oMap;
+        if (!CSVReader::read_csv_file(filename, oMap)) {
             return (false);
         }
         this->clear();
         size_t nr = 0;
-        for (auto it = oMap.begin(); it != oMap.end(); ++it){
+        for (auto it = oMap.begin(); it != oMap.end(); ++it) {
             std::string sId = (*it).first;
             std::string sid = boost::trim_copy(boost::to_lower_copy(sId));
-            if (sid.empty()){
+            if (sid.empty()) {
                 continue;
             }
             const std::vector<boost::any> vv = (*it).second;
             size_t n = vv.size();
-            if (nr == 0){
+            if (nr == 0) {
                 nr = n;
             }
             statdata::DataType rtype = statdata::typeOther;
-            for (size_t i = 0; i < n; ++i){
+            for (size_t i = 0; i < n; ++i) {
                 const boost::any &vx = vv[i];
-                if (!vx.empty()){
+                if (!vx.empty()) {
                     rtype = Value::get_type(vx);
                     break;
                 }
             }// i
-            if (rtype == statdata::typeOther){
+            if (rtype == statdata::typeOther) {
                 continue;
             }
-            Variable var(sid,rtype);
+            Variable var(sid, rtype);
             var.name(sId);
-            if ((rtype == statdata::typeBool) || (rtype == statdata::typeString)){
+            if ((rtype == statdata::typeBool) || (rtype == statdata::typeString)) {
                 var.set_categ_var(true);
             }
-            var.index((int)this->m_vars.size());
+            var.index((int) this->m_vars.size());
             this->m_vars.push_back(var);
             this->m_data[sid] = vv;
         }// it
         this->m_inds.resize(nr);
-        for (size_t i = 0; i < nr; ++i){
+        for (size_t i = 0; i < nr; ++i) {
             std::string sid;
             std::string sname;
             {
                 std::stringstream os;
-                os << "I" << (i+1);
+                os << "I" << (i + 1);
                 sid = os.str();
             }
             {
                 std::stringstream os;
-                os << "INDIVIDU" << (i+1);
+                os << "INDIVIDU" << (i + 1);
                 sname = os.str();
             }
             Individu &ind = this->m_inds[i];
             ind.id(sid);
             ind.name(sname);
-            ind.index((int)i);
+            ind.index((int) i);
         }// i
         return (true);
     }// import_csv_file

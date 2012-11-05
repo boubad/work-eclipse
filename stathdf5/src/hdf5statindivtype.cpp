@@ -4,9 +4,9 @@
  *  Created on: 17 oct. 2012
  *      Author: boubad
  */
-#include "../../include/hdf5/hdf5statindivtype.h"
-#include "../../include/hdf5/hdf5file.h"
-#include "../../include/hdf5/hdf5group.h"
+#include "../include/hdf5statindivtype.h"
+#include "../include/hdf5file.h"
+#include "../include/hdf5group.h"
 ///////////////////////////////////
 #include "helpers.h"
 ///////////////////////////////

@@ -4,9 +4,9 @@
  *  Created on: 14 oct. 2012
  *      Author: boubad
  */
-#include "../../include/hdf5/hdf5dataset.h"
-#include "../../include/hdf5/hdf5file.h"
-#include "../../include/hdf5/hdf5group.h"
+#include "../include/hdf5dataset.h"
+#include "../include/hdf5file.h"
+#include "../include/hdf5group.h"
 ///////////////////////////////////
 #include "helpers.h"
 ///////////////////////////////////

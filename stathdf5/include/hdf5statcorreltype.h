@@ -8,7 +8,7 @@
 #ifndef HDF5STATCORRELTYPE_H_
 #define HDF5STATCORRELTYPE_H_
 ////////////////////////////////////
-#include <statcorrel.h>
+#include "statcorrel.h"
 #include "hdf5datatype.h"
 //////////////////////////////////
 namespace statdata {
