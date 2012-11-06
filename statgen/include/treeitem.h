@@ -10,6 +10,7 @@
 /////////////////////////////////
 #include "dataport.h"
 ///////////////////////////////
+#include <cassert>
 #include <string>
 #include <memory>
 #include <iostream>
@@ -70,12 +71,10 @@ protected:
     TreeItem(size_t n, const LinkType t = linkmean) : m_parent(nullptr),
         m_link(t), m_id((IndexType) - 1), m_var(0), m_level(0)
     {
-        assert(n > 0);
         for (size_t i = 0; i < n; ++i)
         {
             TreeItemPtr pp = std::make_shared<TreeItemType > ();
             TreeItemType *p = pp.get();
-            assert(p != nullptr);
             p->m_parent = this;
             p->m_link = t;
             p->m_id = (IndexType) i;

@@ -4,6 +4,8 @@
  *  Created on: 20 oct. 2012
  *      Author: boubad
  */
+#ifndef NO_GTEST
+/////////////////////////////
 #include <gtest/gtest.h>
 /////////////////////////////
 #include <hdf5store.h>
@@ -130,6 +132,5 @@ TEST_F(HDF5TextAttributeTest,ArrayDataset)
 		}// j
 	}// i
 }/* Array Dataset */
-
-
-
+#else
+#endif // NO_GTEST

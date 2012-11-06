@@ -4,6 +4,8 @@
  *  Created on: 20 oct. 2012
  *      Author: boubad
  */
+#ifndef NO_GTEST
+/////////////////////////////
 #include <gtest/gtest.h>
 /////////////////////////////
 #include <hdf5store.h>
@@ -139,3 +141,5 @@ TYPED_TEST(HDF5NumAttributeTest,ArrayDataset)
 		}// j
 	}// i
 }/* Vector VectorDataset */
+#else
+#endif // NO_GTEST

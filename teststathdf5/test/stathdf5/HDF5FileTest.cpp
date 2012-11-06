@@ -4,6 +4,8 @@
  *  Created on: 21 oct. 2012
  *      Author: boubad
  */
+#ifndef NO_GTEST
+/////////////////////////////
 #include <gtest/gtest.h>
 /////////////////////////////
 #include <hdf5store.h>
@@ -102,3 +104,5 @@ TEST_F(HDF5FileTest,testGetDatasetNames) {
 	ASSERT_TRUE(bFound);
 } // testGetDatasetNames
 ///////////////////////////////////////
+#else
+#endif // NO_GTEST
