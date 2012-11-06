@@ -7,6 +7,8 @@
 
 #ifndef HDF5OBJECT_H_
 #define HDF5OBJECT_H_
+//////////////////////////////
+#include <dataport.h>
 /////////////////////////////////////////
 #include <cassert>
 #include <ctime>
