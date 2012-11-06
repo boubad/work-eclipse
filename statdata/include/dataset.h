@@ -394,7 +394,7 @@ namespace statdata {
     public:
         DataSet();
         explicit
-        DataSet(const std::string &filename);
+        DataSet(const std::string &filename, bool bIsArchiveFile = true);
         explicit
         DataSet(size_t nVars, size_t nRows = 0);
 
@@ -665,6 +665,9 @@ namespace statdata {
     public:
         void clear(void);
         bool import_csv_file(const std::string &filename);
+        bool import_archive_file(const std::string &filename);
+        bool save_csv_file(const std::string &filename);
+        bool save_archive_file(const std::string &filename);
     protected:
         std::vector<Variable> m_vars;
         std::vector<Individu> m_inds;

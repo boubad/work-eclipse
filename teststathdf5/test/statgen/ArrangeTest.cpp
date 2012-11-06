@@ -11,7 +11,7 @@
 #include <sstream>
 #include <iostream>
 //////////////////////////////
-#include "DataFixture.h"
+#include "../DataFixture.h"
 /////////////////////////////
 
 class ArrangeTest : public ::testing::Test

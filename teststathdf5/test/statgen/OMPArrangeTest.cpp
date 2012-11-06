@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 //////////////////////////////
-#include "DataFixture.h"
+#include "../DataFixture.h"
 /////////////////////////////
 
 class OMPArrangeTest : public ::testing::Test

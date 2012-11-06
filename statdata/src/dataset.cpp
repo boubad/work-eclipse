@@ -5,8 +5,12 @@
 //////////////////////////////////
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 /////////////////////////////
 #include <boost/algorithm/string.hpp>
+///////////////////////////////////////
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 //////////////////////////////////
 namespace statdata {
     //////////////////////////////////
@@ -14,8 +18,12 @@ namespace statdata {
     DataSet::DataSet() {
     }
 
-    DataSet::DataSet(const std::string &filename) {
-        this->import_csv_file(filename);
+    DataSet::DataSet(const std::string &filename, bool bIsArchiveFile /* = true */) {
+        if (bIsArchiveFile) {
+            this->import_archive_file(filename);
+        } else {
+            this->import_csv_file(filename);
+        }
     }
 
     DataSet::DataSet(size_t nVars, size_t nRows) {
@@ -761,5 +769,47 @@ namespace statdata {
         this->set_all_data(oMap);
         return (true);
     }// import_csv_file
+
+    bool DataSet::import_archive_file(const std::string &filename) {
+        {
+            // create and open an archive for input
+            std::ifstream ifs(filename.c_str());
+            if (!ifs.is_open()) {
+                return (false);
+            }
+            boost::archive::text_iarchive ia(ifs);
+            DataSet oSet;
+            ia >> oSet;
+            *this = oSet;
+            // archive and stream closed when destructors are called
+        }
+        return (true);
+    }// import_archive_file
+
+    bool DataSet::save_csv_file(const std::string &filename) {
+        // create and open a character archive for output
+        std::ofstream ofs(filename.c_str());
+        if (!ofs.is_open()) {
+            return (false);
+        }
+        return (true);
+    }// save_csv_file
+
+    bool DataSet::save_archive_file(const std::string &filename) {
+        {
+            std::ofstream ofs(filename.c_str());
+            if (!ofs.is_open()) {
+                return (false);
+            }
+            // save data to archive
+            {
+                boost::archive::text_oarchive oa(ofs);
+                // write class instance to archive
+                oa << (*this);
+                // archive and stream closed when destructors are called
+            }
+        }
+        return (true);
+    }// save_archive_file
     /////////////////////////////////////
 }// namespace statdata
