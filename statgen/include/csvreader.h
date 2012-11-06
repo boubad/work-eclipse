@@ -13,6 +13,7 @@
 #include <cassert>
 #include <memory>
 #include <string>
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <cctype>
@@ -131,13 +132,9 @@ namespace statdata {
         } // convert_string
 
         template<class ALLOCS, class ALLOCVEC>
-        static bool read_csv_file(const std::string &filename,
+        static bool read_csv_file(std::istream &in,
         std::vector<std::vector<std::string, ALLOCS>, ALLOCVEC> &oArray) {
             oArray.clear();
-            std::ifstream in(filename.c_str());
-            if (!in.is_open()) {
-                return (false);
-            }
             const size_t T_BUF_SIZE = 4095;
             std::unique_ptr<char> oBuf(new char[T_BUF_SIZE + 1]);
             char *pBuf = oBuf.get();
@@ -174,15 +171,20 @@ namespace statdata {
         } // read_csv_file
 
         template<class ALLOCS, class ALLOCVEC>
-        static bool read_csv_file(const std::wstring &filename,
-        std::vector<std::vector<std::wstring, ALLOCS>, ALLOCVEC> &oArray) {
+        static bool read_csv_file(const std::string &filename,
+        std::vector<std::vector<std::string, ALLOCS>, ALLOCVEC> &oArray) {
             oArray.clear();
-            std::string sv(filename.length(), ' ');
-            std::copy(filename.begin(), filename.end(), sv.begin());
-            std::wifstream in(sv.c_str());
+            std::ifstream in(filename.c_str());
             if (!in.is_open()) {
                 return (false);
             }
+            return (read_csv_file(in, oArray));
+        } // read_csv_file
+
+        template<class ALLOCS, class ALLOCVEC>
+        static bool read_csv_file(std::wistream &in,
+        std::vector<std::vector<std::wstring, ALLOCS>, ALLOCVEC> &oArray) {
+            oArray.clear();
             const size_t T_BUF_SIZE = 4095;
             std::unique_ptr<wchar_t> oBuf(new wchar_t[T_BUF_SIZE + 1]);
             wchar_t *pBuf = oBuf.get();
@@ -218,13 +220,26 @@ namespace statdata {
             return (true);
         } // read_csv_file
 
+        template<class ALLOCS, class ALLOCVEC>
+        static bool read_csv_file(const std::wstring &filename,
+        std::vector<std::vector<std::wstring, ALLOCS>, ALLOCVEC> &oArray) {
+            oArray.clear();
+            std::string sv(filename.length(), ' ');
+            std::copy(filename.begin(), filename.end(), sv.begin());
+            std::wifstream in(sv.c_str());
+            if (!in.is_open()) {
+                return (false);
+            }
+            return (read_csv_file(in, oArray));
+        } // read_csv_file
+
         template<class ALLOCV, class ALLOCPAIR>
-        static bool read_csv_file(const std::string &filename,
+        static bool read_csv_file(std::istream &in,
         std::map<std::string, std::vector<boost::any, ALLOCV>,
         std::less<std::string>, ALLOCPAIR> &oMap) {
             oMap.clear();
             std::vector<std::vector<std::string> > oVec;
-            if (!CSVReader::read_csv_file(filename, oVec)) {
+            if (!CSVReader::read_csv_file(in, oVec)) {
                 return (false);
             }
             size_t nr = oVec.size();
@@ -309,12 +324,24 @@ namespace statdata {
         } // read_csv_file
 
         template<class ALLOCV, class ALLOCPAIR>
-        static bool read_csv_file(const std::wstring &filename,
+        static bool read_csv_file(const std::string &filename,
+        std::map<std::string, std::vector<boost::any, ALLOCV>,
+        std::less<std::string>, ALLOCPAIR> &oMap) {
+            oMap.clear();
+            std::ifstream in(filename.c_str());
+            if (!in.is_open()) {
+                return (false);
+            }
+            return (read_csv_file(in, oMap));
+        } // read_csv_file
+
+        template<class ALLOCV, class ALLOCPAIR>
+        static bool read_csv_file(std::wistream &in,
         std::map<std::wstring, std::vector<boost::any, ALLOCV>,
         std::less<std::wstring>, ALLOCPAIR> &oMap) {
             oMap.clear();
             std::vector<std::vector<std::wstring> > oVec;
-            if (!CSVReader::read_csv_file(filename, oVec)) {
+            if (!CSVReader::read_csv_file(in, oVec)) {
                 return (false);
             }
             size_t nr = oVec.size();
@@ -396,6 +423,20 @@ namespace statdata {
                 oMap[varname] = data;
             } // icol
             return (true);
+        } // read_csv_file
+
+        template<class ALLOCV, class ALLOCPAIR>
+        static bool read_csv_file(const std::wstring &filename,
+        std::map<std::wstring, std::vector<boost::any, ALLOCV>,
+        std::less<std::wstring>, ALLOCPAIR> &oMap) {
+            oMap.clear();
+            std::string sv(filename.length(), ' ');
+            std::copy(filename.begin(), filename.end(), sv.begin());
+            std::wifstream in(sv.c_str());
+            if (!in.is_open()) {
+                return (false);
+            }
+            return (read_csv_file(in, oMap));
         } // read_csv_file
     };
     // class CSVReadear

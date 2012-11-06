@@ -1,4 +1,5 @@
-**/build/**
+**/noscm*/**
+**/[Bb]uild/**
 **/dist/**
 **/nbproject/**
 **/[Mm]akefile
@@ -17,6 +18,7 @@
 .metadata/**
 **/bin/**
 **/tmp/**
+**/*-build-*/**
 tmp/**/*
 **/*.tmp
 **/*.bak
@@ -28,6 +30,7 @@ tmp/**/*
 **/.loadpath
 
 # Visal Studio
+**/[Gg]enerated[Ff]ile*/**
 **/ipch/**
 **/x64/**
 **/.svn/**
@@ -51,7 +54,7 @@ tmp/**/*
 **/.buildpath
 
 #ignore thumbnails created by windows
-**/Thumbs.db
+**/[Tt]humbs.db
 **/[Bb]in/**
 **/[Dd]ebug*/**
 **/[Pp]ofile/**
