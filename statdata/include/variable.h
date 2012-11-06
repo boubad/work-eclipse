@@ -205,7 +205,10 @@ namespace statdata {
         }
 
         void id(const std::string &s) {
-            this->m_id = boost::to_lower_copy(boost::trim_copy(s));
+            std::string sx(s);
+            boost::erase_all(sx, "\"");
+            boost::erase_all(sx, " ");
+            this->m_id = boost::to_lower_copy(boost::trim_copy(sx));
         }
 
         const std::string &name(void) const {
@@ -228,7 +231,7 @@ namespace statdata {
     }; // class Variable
     typedef Variable *PVariable;
 
-  //  BOOST_CLASS_VERSION(statdata::Variable, STAT_SERIALZE_VERSION )
+    //  BOOST_CLASS_VERSION(statdata::Variable, STAT_SERIALZE_VERSION )
 
     ////////////////////////////////////////
 
@@ -315,7 +318,10 @@ namespace statdata {
         }
 
         void id(const std::string &s) {
-            this->m_id = boost::to_lower_copy(boost::trim_copy(s));
+            std::string sx(s);
+            boost::erase_all(sx, "\"");
+            boost::erase_all(sx, " ");
+            this->m_id = boost::to_lower_copy(boost::trim_copy(sx));
         }
 
         const std::string &name(void) const {
@@ -332,7 +338,7 @@ namespace statdata {
         std::string m_id;
         std::string m_name;
     }; // class Individu
-  //  BOOST_CLASS_VERSION(Individu,STAT_SERIALZE_VERSION )
+    //  BOOST_CLASS_VERSION(Individu,STAT_SERIALZE_VERSION )
     typedef Individu *PIndividu;
     /////////////////////////////////////////
 }// namespace statdata

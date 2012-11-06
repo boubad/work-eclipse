@@ -10,6 +10,7 @@
 ////////////////////////////////
 #include <value.h>
 ///////////////////////////////
+#include <iostream>
 #include <sstream>
 ////////////////////////////////
 #include "variable.h"
@@ -466,7 +467,32 @@ namespace statdata {
         bool get_names_variable(std::string &sId) const;
         bool get_weights_variable(std::string &sId) const;
         //
-
+        template <class ALLOCS>
+        void get_categ_vars_ids(std::vector<std::string, ALLOCS> &data) const {
+            data.clear();
+            const std::vector<Variable> &vv = this->m_vars;
+            for (auto it = vv.begin(); it != vv.end(); ++it){
+                 const Variable &v = *it;
+                 if (v.is_categ_var() && (!v.is_num_var()) &&
+                         (!v.is_name_var())){
+                     std::string sid = v.id();
+                     data.push_back(sid);
+                 }
+            }// it
+        }// get_categ_vars_ids
+        template <class ALLOCS>
+        void get_num_vars_ids(std::vector<std::string, ALLOCS> &data) const {
+            data.clear();
+            const std::vector<Variable> &vv = this->m_vars;
+            for (auto it = vv.begin(); it != vv.end(); ++it){
+                 const Variable &v = *it;
+                 if (v.is_num_var() && (!v.is_num_var()) &&
+                         (!v.is_name_var()) && (!v.is_weight_var())){
+                     std::string sid = v.id();
+                     data.push_back(sid);
+                 }
+            }// it
+        }// get_num_vars_ids
         template <class ALLOCS>
         bool get_ids(std::vector<std::string, ALLOCS> &data) const {
             data.clear();
@@ -588,7 +614,6 @@ namespace statdata {
                         n = nx;
                     }
                     if (n > 0) {
-                        data.resize(n);
                         for (size_t i = 0; i < n; ++i) {
                             vv[i] = boost::any(data[i]);
                         }// i
@@ -668,6 +693,10 @@ namespace statdata {
         bool import_archive_file(const std::string &filename);
         bool save_csv_file(const std::string &filename);
         bool save_archive_file(const std::string &filename);
+        bool import_csv_stream(std::istream &in);
+        bool import_archive_stream(std::istream &in);
+        bool save_csv_stream(std::ostream &os);
+        bool save_archive_stream(std::ostream &os);
     protected:
         std::vector<Variable> m_vars;
         std::vector<Individu> m_inds;

@@ -761,6 +761,15 @@ namespace statdata {
         return (false);
     }
 
+    bool DataSet::import_csv_stream(std::istream &in) {
+        std::map<std::string, std::vector<boost::any> > oMap;
+        if (!CSVReader::read_csv_file(in, oMap)) {
+            return (false);
+        }
+        this->set_all_data(oMap);
+        return (true);
+    }// import_csv_stream
+
     bool DataSet::import_csv_file(const std::string & filename) {
         std::map<std::string, std::vector<boost::any> > oMap;
         if (!CSVReader::read_csv_file(filename, oMap)) {
@@ -786,23 +795,89 @@ namespace statdata {
         return (true);
     }// import_archive_file
 
+    bool DataSet::import_archive_stream(std::istream &ifs) {
+        {
+            boost::archive::text_iarchive ia(ifs);
+            DataSet oSet;
+            ia >> oSet;
+            *this = oSet;
+            // archive and stream closed when destructors are called
+        }
+        return (true);
+    }// import_archive_file
+
     bool DataSet::save_csv_file(const std::string &filename) {
         // create and open a character archive for output
         std::ofstream ofs(filename.c_str());
         if (!ofs.is_open()) {
             return (false);
         }
+        return (this->save_csv_stream(ofs));
+    }// save_csv_file
+
+    bool DataSet::save_csv_stream(std::ostream &os)  {
+        const std::vector<Variable> &vars = this->m_vars;
+        std::vector<std::string> varnames;
+        for (auto it = vars.begin(); it != vars.end(); ++it) {
+            std::string sid = (*it).id();
+            varnames.push_back(sid);
+            if (it != vars.begin()) {
+                os << "\t";
+            }
+            os << sid;
+        }// it
+        os << std::endl;
+        size_t nVars = varnames.size();
+        size_t nInds = this->nb_indivs();
+        std::map<std::string, std::vector<boost::any> > &oMap = this->m_data;
+        std::string strEmpty("N/A");
+        for (size_t irow = 0; irow < nInds; ++irow) {
+            for (size_t ivar = 0; ivar < nVars; ++ivar) {
+                if (ivar != 0) {
+                    os << "\t";
+                }
+                std::string sid = varnames[ivar];
+                std::string sres;
+                if (oMap.find(sid) != oMap.end()) {
+                    auto &vv = oMap[sid];
+                    if (irow < vv.size()) {
+                        const boost::any &v = vv[irow];
+                        if (!vv.empty()) {
+                            Value::get_value(v, sres);
+                        }
+                    }
+                }
+                if (sres.empty()) {
+                    os << strEmpty;
+                } else {
+                    os << sres;
+                }
+            }// ivar
+            os << std::endl;
+        }// irow
         return (true);
     }// save_csv_file
+    bool DataSet::save_archive_stream(std::ostream &ofs) {
+        {
+            // save data to archive
+            {
+                boost::archive::text_oarchive oa(ofs);
+                // write class instance to archive
+                oa << (*this);
+                // archive and stream closed when destructors are called
+            }
+        }
+        return (true);
+    }// save_archive_file
 
     bool DataSet::save_archive_file(const std::string &filename) {
         {
-            std::ofstream ofs(filename.c_str());
-            if (!ofs.is_open()) {
-                return (false);
-            }
             // save data to archive
             {
+                std::ofstream ofs(filename.c_str());
+                if (!ofs.is_open()){
+                    return (false);
+                }
                 boost::archive::text_oarchive oa(ofs);
                 // write class instance to archive
                 oa << (*this);
