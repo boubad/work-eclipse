@@ -25,9 +25,10 @@ namespace statdata {
     template<typename T = double>
             class IntraEigenSolver {
     public:
+
         template<typename X, typename Z>
         static bool compute_eigen(const size_t nr,
-                const X *pSrc, size_t &nFacts,Z *pa, Z *pv) {
+                const X *pSrc, size_t &nFacts, Z *pa, Z *pv) {
             //
             assert(nr > 1);
             assert(pSrc != nullptr);
@@ -68,6 +69,7 @@ namespace statdata {
             }
             return (true);
         }// compute_eigen
+
         template<typename X, typename Z>
         static bool compute_eigen(const size_t nr,
                 const std::valarray<X> &oSrc, size_t &nFacts,
@@ -147,10 +149,10 @@ namespace statdata {
             oVals.resize(nFacts);
             oVecs.resize(nFacts * nr);
             for (size_t i = 0; i < nFacts; ++i) {
-                oVals[i] = (Z)pVals[i];
+                oVals[i] = (Z) pVals[i];
                 for (size_t j = 0; j < nr; ++j) {
                     const size_t k = (size_t) (j * nFacts + i);
-                    oVecs[k] = (Z)pVecs[k];
+                    oVecs[k] = (Z) pVecs[k];
                 }
             }
             return (true);
@@ -243,8 +245,8 @@ namespace statdata {
                     && IntraEigenSolver<T>::compute_eigen(nv, xCorr, nFacts, xVals,
                     xVecs);
             if (bRet) {
-                oVals = std::vector<T, ALLOCT > (nFacts);
-                oVecs = std::vector<T, ALLOCT > (nFacts * nv);
+                oVals.resize(nFacts);
+                oVecs.resize(nFacts * nv);
                 for (size_t i = 0; i < nFacts; ++i) {
                     double x = xVals[i];
                     oVals[i] = (T) x;
@@ -255,10 +257,10 @@ namespace statdata {
                 }
             }
             if (bRet) {
-                oFreq = std::vector<T, ALLOCT > (nFacts);
-                oVecs = std::vector<T, ALLOCT > (nFacts * nv);
-                oVars = std::vector<T, ALLOCT > (nFacts * nv);
-                oInds = std::vector<T, ALLOCT > (nFacts * nr);
+                oFreq.resize(nFacts);
+                oVecs.resize(nFacts * nv);
+                oVars.resize(nFacts * nv);
+                oInds.resize(nFacts * nr);
                 double act2 = std::sqrt((double) nv);
                 for (size_t iFact = 0; iFact < nFacts; ++iFact) {
                     double val = xVals[iFact];
@@ -282,13 +284,150 @@ namespace statdata {
                 }
             }
             return (bRet);
-        }
+        }// compute_anacompo
+
+        template<typename X>
+        static bool compute_anacompo(const size_t nr, const size_t nv,
+                const std::valarray<X> &oSrc, std::valarray<T> &oMeans,
+                std::valarray<T> &oStds, std::valarray<T> &oCorr,
+                size_t &nFacts, std::valarray<T> &oFreq,
+                std::valarray<T> &oVals, std::valarray<T> &oVecs,
+                std::valarray<T> &oVars, std::valarray<T> &oInds) {
+            //
+            assert(nv > 1);
+            assert(nr > nv);
+            //
+            const size_t nnv = nv * nv;
+            const size_t nnr = nr * nv;
+            //
+            assert(oSrc.size() >= nnr);
+            //
+            oMeans.resize(nv);
+            oStds.resize(nv);
+            oCorr.resize(nnv);
+            //
+            std::vector<double> oTemp(nnr);
+            std::vector<double> xCorr(nnv);
+            std::vector<double> xStds(nv);
+            bool bRet = true;
+            double dnr = (double) nr;
+            double dnr1 = (double) (nr - 1);
+            for (size_t ivar = 0; ivar < nv; ++ivar) {
+                xCorr[ivar * nv + ivar] = 1.0;
+                oCorr[ivar * nv + ivar] = (T) 1.0;
+                double s = 0.0;
+                for (size_t i = 0; i < nr; ++i) {
+                    const size_t k = i * nv + ivar;
+                    double x = (double) oSrc[k];
+                    oTemp[k] = x;
+                    s += x;
+                } // i
+                double moy = s / dnr;
+                oMeans[ivar] = (T) moy;
+                s = 0.0;
+                for (size_t i = 0; i < nr; ++i) {
+                    const size_t k = i * nv + ivar;
+                    double x = oTemp[k] - moy;
+                    oTemp[k] = x;
+                    s += x * x;
+                } // i
+                double dvar = s / dnr1;
+                if (dvar > 0.0) {
+                    double ec1 = std::sqrt(dvar);
+                    xStds[ivar] = ec1;
+                    oStds[ivar] = (T) ec1;
+                    for (size_t ivar1 = 0; ivar1 < ivar; ++ivar1) {
+                        double s = 0.0;
+                        for (size_t i = 0; i < nr; ++i) {
+                            double x = oTemp[i * nv + ivar1]
+                                    * oTemp[i * nv + ivar1];
+                            s += x;
+                        }
+                        s /= dnr1;
+                        double r = s / (ec1 * xStds[ivar1]);
+                        T rt = (T) r;
+                        xCorr[ivar * nv + ivar1] = r;
+                        oCorr[ivar * nv + ivar1] = rt;
+                        xCorr[ivar1 * nv + ivar] = r;
+                        oCorr[ivar1 * nv + ivar] = rt;
+                    }
+                } else {
+                    bRet = false;
+                }
+            }
+            if (bRet) {
+                for (size_t ivar = 0; ivar < nv; ++ivar) {
+                    double vec = xStds[ivar];
+                    for (size_t i = 0; i < nr; ++i) {
+                        const size_t k = i * nv + ivar;
+                        double x = oTemp[k] / vec;
+                        oTemp[k] = x;
+                    }
+                }
+            }
+
+            nFacts = 0;
+            std::vector<double> xVals, xVecs;
+            double stotal = 0.0;
+            bRet = bRet
+                    && IntraEigenSolver<T>::compute_eigen(nv, xCorr, nFacts, xVals,
+                    xVecs);
+            if (bRet) {
+                oVals.resize(nFacts);
+                oVecs.resize(nFacts * nv);
+                for (size_t i = 0; i < nFacts; ++i) {
+                    double x = xVals[i];
+                    oVals[i] = (T) x;
+                    stotal += x;
+                }
+                if (stotal <= 0) {
+                    bRet = false;
+                }
+            }
+            if (bRet) {
+                oFreq.resize(nFacts);
+                oVecs.resize(nFacts * nv);
+                oVars.resize(nFacts * nv);
+                oInds.resize(nFacts * nr);
+                double act2 = std::sqrt((double) nv);
+                for (size_t iFact = 0; iFact < nFacts; ++iFact) {
+                    double val = xVals[iFact];
+                    oFreq[iFact] = (T) (val / stotal);
+                    double fval = std::sqrt(val);
+                    for (size_t ivar = 0; ivar < nv; ++ivar) {
+                        const size_t k = ivar * nFacts + iFact;
+                        double vx = xVecs[k];
+                        oVecs[k] = (T) vx;
+                        oVars[k] = (T) (fval * xVecs[k]);
+                    }
+                    for (size_t irow = 0; irow < nr; ++irow) {
+                        double s = 0.0;
+                        for (size_t ivar = 0; ivar < nv; ++ivar) {
+                            double x = oTemp[irow * nv + ivar]
+                                    * xVecs[ivar * nFacts + iFact];
+                            s += x;
+                        }
+                        oInds[irow * nFacts + iFact] = (T) (s / act2);
+                    }
+                }
+            }
+            return (bRet);
+        }// compute_anacompo
 
         template<typename X, class ALLOCX, class ALLOCT>
         static bool compute_anacompo(const size_t nr, const size_t nv,
         const std::vector<X, ALLOCX> &oSrc, size_t &nFacts,
         std::vector<T, ALLOCT> &oVars, std::vector<T, ALLOCT> &oInds) {
             std::vector<T, ALLOCT> oMeans, oStds, oCorr, oFreq, oVals, oVecs;
+            return (IntraEigenSolver<T>::compute_anacompo(nr, nv, oSrc, oMeans,
+                    oStds, oCorr, nFacts, oFreq, oVals, oVecs, oVars, oInds));
+        }
+
+        template<typename X>
+        static bool compute_anacompo(const size_t nr, const size_t nv,
+                const std::valarray<X> &oSrc, size_t &nFacts,
+                std::valarray<T> &oVars, std::valarray<T> &oInds) {
+            std::valarray<T> oMeans, oStds, oCorr, oFreq, oVals, oVecs;
             return (IntraEigenSolver<T>::compute_anacompo(nr, nv, oSrc, oMeans,
                     oStds, oCorr, nFacts, oFreq, oVals, oVecs, oVars, oInds));
         }
