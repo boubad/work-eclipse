@@ -1,0 +1,11 @@
+Projet  stateigen (Eigen values and vectors)
+
+C++ Standard: c++11 (or c++0x)
+
+External dependencies:
+	eigen3 c++ template library
+
+Functions:
+
+Compiling details:
+        Linux --> -I/usr/include/eigen3

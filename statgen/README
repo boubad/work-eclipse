@@ -4,7 +4,7 @@ C++ Standard: c++11 (or c++0x)
 
 External dependencies:
 	boost c++ library (headears only)
-	eigen3 c++ template library
+
 Functions:
 	Statistics Distributions
 	Univar Statistics
@@ -15,4 +15,3 @@ Functions:
 	Hierachical aggregation	
 
 Compiling details:
-        Linux --> -I/usr/include/eigen3
