@@ -559,7 +559,7 @@ std::wostream & operator<<(std::wostream &os,
 namespace statdata {
 ///////////////////////////////////
 template<typename FTYPE = double, typename STYPE = std::string,
-		class ALLOCCORREL = my_sub_allocator<CorrelDesc<FTYPE, STYPE>> >
+		class ALLOCCORREL = std::allocator<CorrelDesc<FTYPE, STYPE>> >
 class CorrelDescs {
 public:
 	typedef std::vector<CorrelDesc<FTYPE, STYPE>, ALLOCCORREL> CorrelVectorType;
