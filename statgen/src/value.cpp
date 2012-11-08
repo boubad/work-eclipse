@@ -12,6 +12,34 @@
 namespace statdata {
     ////////////////////////////////////////
 
+    std::ostream & Value::to_stream(std::ostream &os, const boost::any &val) {
+        if (val.empty()) {
+            os << "N/A";
+        } else {
+            std::string s;
+            if (Value::get_value(val, s)) {
+                os << s;
+            } else {
+                os << "N/A";
+            }
+        }
+        return os;
+    }// to_stream
+
+    std::wostream & Value::to_stream(std::wostream &os, const boost::any &val) {
+        if (val.empty()) {
+            os << L"N/A";
+        } else {
+            std::wstring s;
+            if (Value::get_value(val, s)) {
+                os << s;
+            } else {
+                os << L"N/A";
+            }
+        }
+        return os;
+    }// to_stream    
+
     statdata::DataType Value::get_type(const boost::any &v) {
         statdata::DataType rtype = statdata::typeOther;
         if (v.empty()) {
