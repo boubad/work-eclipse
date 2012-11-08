@@ -337,17 +337,21 @@ namespace statdata {
     public:
 
         NetCDFVariable() :
-        categ_var(false), id_var(false), name_var(false), type(statdata::typeOther) {
+        categ_var(false), id_var(false), name_var(false),
+        weight_var(false), active_var(true), active_ind(false), type(statdata::typeOther) {
         }
 
         NetCDFVariable(const std::string &sname, const statdata::DataType &stype) :
-        NetCDFDataInfo(sname), categ_var(false), id_var(false), name_var(false), type(
+        NetCDFDataInfo(sname), categ_var(false), id_var(false), name_var(false),
+        weight_var(false), active_var(true), active_ind(false), type(
         stype) {
         }
 
         NetCDFVariable(const NetCDFVariable &other) :
         NetCDFDataInfo(other), categ_var(other.categ_var), id_var(other.id_var), name_var(
-        other.name_var), type(other.type), long_name(
+        other.name_var), weight_var(other.weight_var), active_var(other.active_var),
+        active_ind(other.active_ind),
+        type(other.type), long_name(
         other.long_name), title(other.title), c_format(
         other.c_format), units(other.units), valid_min(
         other.valid_min), valid_max(other.valid_max), missing_value(
@@ -370,6 +374,9 @@ namespace statdata {
                 this->categ_var = other.categ_var;
                 this->id_var = other.id_var;
                 this->name_var = other.name_var;
+                this->active_ind = other.active_ind;
+                this->active_var = other.active_var;
+                this->weight_var = other.weight_var;
             }
             return (*this);
         }
@@ -397,6 +404,15 @@ namespace statdata {
             }
             if (this->name_var) {
                 os << ",NAME_VAR ";
+            }
+            if (this->weight_var) {
+                os << ",WEIGHT_VAR ";
+            }
+            if (this->active_var) {
+                os << ",ACTIVE_VAR ";
+            }
+            if (this->active_ind) {
+                os << ",ACTIVE_IND_VAR ";
             }
             if (!this->c_format.empty()) {
                 os << ",C_format: " << this->c_format;
@@ -455,6 +471,15 @@ namespace statdata {
             if (this->name_var) {
                 os << L",NAME_VAR ";
             }
+            if (this->weight_var) {
+                os << L",WEIGHT_VAR ";
+            }
+            if (this->active_var) {
+                os << L",ACTIVE_VAR ";
+            }
+            if (this->active_ind) {
+                os << L",ACTIVE_IND_VAR ";
+            }
             if (!this->c_format.empty()) {
                 std::wstring ss(this->c_format.length(), L' ');
                 std::copy(this->c_format.begin(), this->c_format.end(), ss.begin());
@@ -494,6 +519,9 @@ namespace statdata {
         bool categ_var;
         bool id_var;
         bool name_var;
+        bool weight_var;
+        bool active_var;
+        bool active_ind;
         statdata::DataType type;
         std::string long_name;
         std::string title;

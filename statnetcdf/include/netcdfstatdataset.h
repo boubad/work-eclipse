@@ -9,6 +9,7 @@
 #define	NETCDFSTATDATASET_H
 
 #include "datagroup.h"
+
 ///////////////////////////////
 #include <cassert>
 #include <set>
@@ -16,6 +17,9 @@
 #include <memory>
 //////////////////////////////////
 namespace statdata {
+    ////////////////////////////////////////////
+    class DataSet;
+    /////////////////////////////////////////
 
     class NetCDFStatDataSetFile : public statdata::NetCDFDataGroup {
     public:
@@ -26,8 +30,12 @@ namespace statdata {
         NetCDFStatDataSetFile(const std::string &filename,
                 statdata::datafile_open_mode mode =
                 statdata::mode_read, bool bClassic = true);
+        NetCDFStatDataSetFile(const std::string &filename,
+                DataSet &oSet, bool bClassic = true);
         virtual ~NetCDFStatDataSetFile();
     public:
+        bool read_from(DataSet &oSet);
+        bool read(DataSet &oSet);
         std::ostream & export_data(std::ostream &os);
         std::wostream & export_data(std::wostream &os);
         bool get_indivs_dimension(NetCDFDimension &oDim);
@@ -327,7 +335,10 @@ namespace statdata {
         bool set_categ_variable(const std::string &varname);
         bool set_indivsnames_variable(const std::string &varname);
         bool get_indivsids_variable(std::string &varname);
-
+        bool get_indivsnames_variable(std::string &varname);
+        bool set_indivsweights_variable(const std::string &varname);
+        bool get_indivsweights_variable(std::string &varname);
+        
         template<class ALLOCP1>
         bool get_indivsids(
         std::map<size_t, boost::any, std::less<size_t>, ALLOCP1> &oMap) {
@@ -409,7 +420,7 @@ namespace statdata {
             }
             size_t pos = 0;
             bool bFound = false;
-           for (auto it = vMap.begin(); it != vMap.end(); ++it) {
+            for (auto it = vMap.begin(); it != vMap.end(); ++it) {
                 const boost::any &vx = (*it).second;
                 if (!vx.empty()) {
                     std::string sx;
@@ -456,6 +467,7 @@ namespace statdata {
         static const char *ATT_CATEG_VAR;
         static const char *ATT_ID_VAR;
         static const char *ATT_NAME_VAR;
+         static const char *ATT_WEIGHT_VAR;
     };
 
 } /* namespace statdata */

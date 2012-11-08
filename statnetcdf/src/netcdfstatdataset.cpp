@@ -1,5 +1,8 @@
 #include "../include/netcdfstatdataset.h"
 ///////////////////////////////
+#include <dataset.h>
+#include <cassert>
+///////////////////////////////////
 namespace statdata {
     ///////////////////////////////
     const char *NetCDFStatDataSetFile::ATT_STATDATASET = "IsStatDataSet";
@@ -8,9 +11,98 @@ namespace statdata {
     const char *NetCDFStatDataSetFile::ATT_CATEG_VAR = "categ_var";
     const char *NetCDFStatDataSetFile::ATT_ID_VAR = "id_var";
     const char *NetCDFStatDataSetFile::ATT_NAME_VAR = "name_var";
+    const char *NetCDFStatDataSetFile::ATT_WEIGHT_VAR = "weights_var";
     /////////////////////////////////////////
 
-    std::ostream & NetCDFStatDataSetFile::export_data(std::ostream &os) {
+    bool NetCDFStatDataSetFile::read_from(DataSet &oSet) {
+        size_t nVars = oSet.nb_vars();
+        for (size_t ivar = 0; ivar < nVars; ++ivar) {
+            const Variable *pVar = oSet.get_variable(ivar);
+            if (pVar != nullptr) {
+                std::string varId = pVar->id();
+                statdata::DataType type = pVar->get_type();
+                if (type != statdata::typeOther) {
+                    NetCDFVariable oVar;
+                    if (!this->add_indiv_variable(varId, type, oVar)) {
+                        return (false);
+                    }
+                    if (pVar->is_categ_var()) {
+                        if (!this->set_categ_variable(varId)) {
+                            return (false);
+                        }
+                    }
+                    if (pVar->is_id_var()) {
+                        if (!this->set_indivsids_variable(varId)) {
+                            return (false);
+                        }
+                    }
+                    if (pVar->is_name_var()) {
+                        if (!this->set_indivsnames_variable(varId)) {
+                            return (false);
+                        }
+                    }
+                    if (pVar->is_weight_var()){
+                        if (!this->set_indivsweights_variable(varId)){
+                            return (false);
+                        }
+                    }
+                    std::vector<boost::any> *pdata = oSet.variable_data(varId);
+                    if ((pdata != nullptr) && (!pdata->empty())) {
+                        if (!this->write_indiv_data(varId, *pdata)) {
+                            return (false);
+                        }
+                    }
+                }
+            } // pVar
+        }// ivar
+        return (true);
+    }// read_from
+
+    bool NetCDFStatDataSetFile::read(DataSet &oSet) {
+        oSet.clear();
+        NetCDFVariables vars;
+        if (!this->get_indivs_variables(vars)) {
+            return (false);
+        }
+        const size_t m = vars.size();
+        for (size_t i = 0; i < m; ++i) {
+            const NetCDFVariable &v = vars[i];
+            size_t nStart = 0;
+            size_t nCount = 0;
+            std::string vname = v.name;
+            Variable *pVar = oSet.add_variable(vname, vname);
+            if (pVar == nullptr) {
+                return (false);
+            }
+            pVar->set_type(v.type);
+            std::vector<std::string> vals;
+            if (!this->read_indiv_data(v.name, vals, nStart, nCount)) {
+                return (false);
+            }
+            if (!oSet.set_data(v.name, vals)) {
+                return (false);
+            }
+        }// i
+        std::string varname;
+        if (this->get_indivsids_variable(varname)){
+            if (!oSet.set_ids_variable(varname)){
+                return (false);
+            }
+        }
+        if (this->get_indivsnames_variable(varname)){
+            if (!oSet.set_names_variable(varname)){
+                return (false);
+            }
+        }
+        if (this->get_indivsweights_variable(varname)){
+            if (!oSet.set_weights_variable(varname)){
+                return (false);
+            }
+        }
+        return (true);
+    }// save_to
+
+    std::ostream & NetCDFStatDataSetFile::export_data(std::ostream & os) {
         NetCDFVariables vars;
         if (!this->get_indivs_variables(vars)) {
             return (os);
@@ -56,7 +148,7 @@ namespace statdata {
         return (os);
     } // export_data
 
-    std::wostream & NetCDFStatDataSetFile::export_data(std::wostream &os) {
+    std::wostream & NetCDFStatDataSetFile::export_data(std::wostream & os) {
         NetCDFVariables vars;
         if (!this->get_indivs_variables(vars)) {
             return (os);
@@ -104,7 +196,7 @@ namespace statdata {
         return (os);
     } // export_data
 
-    bool NetCDFStatDataSetFile::get_indivsids_variable(std::string &varname) {
+    bool NetCDFStatDataSetFile::get_indivsids_variable(std::string & varname) {
         varname.clear();
         Values vals;
         std::string attname(ATT_INDIVIDS_VAR);
@@ -116,12 +208,27 @@ namespace statdata {
         }
         const boost::any &v = vals[0];
         if (Value::get_type(v) == statdata::typeString) {
-            return (Value::get_value(v,varname));
+            return (Value::get_value(v, varname));
         }
         return (false);
     } //get_indivsids_variable
-
-    bool NetCDFStatDataSetFile::set_indivsids_variable(const std::string &varname) {
+    bool NetCDFStatDataSetFile::get_indivsweights_variable(std::string & varname) {
+        varname.clear();
+        Values vals;
+        std::string attname(ATT_WEIGHT_VAR);
+        if (!this->read_attribute(attname, vals)) {
+            return (false);
+        }
+        if (vals.empty()) {
+            return (false);
+        }
+        const boost::any &v = vals[0];
+        if (Value::get_type(v) == statdata::typeString) {
+            return (Value::get_value(v, varname));
+        }
+        return (false);
+    } //get_indivsids_variable
+    bool NetCDFStatDataSetFile::set_indivsids_variable(const std::string & varname) {
         NetCDFVariable var;
         if (!this->get_indiv_variable(varname, var)) {
             return (false);
@@ -142,8 +249,28 @@ namespace statdata {
         }
         return (bRet);
     } // set_indivsids_variable
-
-    bool NetCDFStatDataSetFile::set_categ_variable(const std::string &varname) {
+    bool NetCDFStatDataSetFile::set_indivsweights_variable(const std::string & varname) {
+        NetCDFVariable var;
+        if (!this->get_indiv_variable(varname, var)) {
+            return (false);
+        }
+        statdata::DataType t = var.type;
+        if ((t != typeFloat) && (t != typeDouble) && (t != typeShort) && (t != typeInt)
+                && (t != typeByte)) {
+            return false;
+        }
+        Values vals(1);
+        std::string attname(ATT_WEIGHT_VAR);
+        vals[0] = varname;
+        bool bRet = this->write_attribute(attname, vals);
+        if (bRet) {
+            vals[0] = (short) 1;
+            attname = ATT_WEIGHT_VAR;
+            bRet = this->write_attribute(varname, attname, vals);
+        }
+        return (bRet);
+    } // set_indivsids_variable
+    bool NetCDFStatDataSetFile::set_categ_variable(const std::string & varname) {
         NetCDFVariable var;
         if (!this->get_indiv_variable(varname, var)) {
             return (false);
@@ -153,8 +280,23 @@ namespace statdata {
         vals[0] = (short) 1;
         return (this->write_attribute(var.name, attname, vals));
     } // set_categ_variable
-
-    bool NetCDFStatDataSetFile::set_indivsnames_variable(const std::string &varname) {
+    bool NetCDFStatDataSetFile::get_indivsnames_variable(std::string &varname){
+         varname.clear();
+        Values vals;
+        std::string attname(ATT_NAME_VAR);
+        if (!this->read_attribute(attname, vals)) {
+            return (false);
+        }
+        if (vals.empty()) {
+            return (false);
+        }
+        const boost::any &v = vals[0];
+        if (Value::get_type(v) == statdata::typeString) {
+            return (Value::get_value(v, varname));
+        }
+        return (false);
+    }
+    bool NetCDFStatDataSetFile::set_indivsnames_variable(const std::string & varname) {
         NetCDFVariable var;
         if (!this->get_indiv_variable(varname, var)) {
             return (false);
@@ -171,7 +313,7 @@ namespace statdata {
     } //set_indivsnames_variable
 
     bool NetCDFStatDataSetFile::read_indiv_data(const std::string &varname,
-            Values &values, size_t &nStartIndex, size_t &nCount) {
+            Values &values, size_t &nStartIndex, size_t & nCount) {
         values.clear();
         std::valarray<size_t> index(1);
         std::valarray<size_t> count(1);
@@ -219,7 +361,7 @@ namespace statdata {
     } // write_indiv_data
 
     bool NetCDFStatDataSetFile::add_indiv_variable(const std::string &varname,
-            const statdata::DataType &dType, NetCDFVariable &oVar) {
+            const statdata::DataType &dType, NetCDFVariable & oVar) {
         NetCDFVariables vv;
         if (!this->get_indivs_variables(vv)) {
             return (false);
@@ -253,7 +395,7 @@ namespace statdata {
     } // add_indiv_variable
 
     bool NetCDFStatDataSetFile::get_indiv_variable(const std::string &varname,
-            NetCDFVariable &oVar) {
+            NetCDFVariable & oVar) {
         NetCDFVariables vv;
         if (!this->get_indivs_variables(vv)) {
             return (false);
@@ -268,7 +410,7 @@ namespace statdata {
         return (false);
     } // get_indiv_variable
 
-    bool NetCDFStatDataSetFile::get_indivs_dimension(NetCDFDimension &oDim) {
+    bool NetCDFStatDataSetFile::get_indivs_dimension(NetCDFDimension & oDim) {
         NetCDFDimensions dims;
         if (this->get_unlimited_dimensions(dims)) {
             if (!dims.empty()) {
@@ -279,7 +421,7 @@ namespace statdata {
         return (false);
     } // get_indivs_dimension
 
-    bool NetCDFStatDataSetFile::get_indivs_size(size_t &nLen) {
+    bool NetCDFStatDataSetFile::get_indivs_size(size_t & nLen) {
         nLen = 0;
         NetCDFDimension oDim;
         if (this->get_indivs_dimension(oDim)) {
@@ -325,6 +467,14 @@ namespace statdata {
             datafile_open_mode mode/*= mode_read */, bool bClassic /*= true */) :
     NetCDFDataGroup(nullptr) {
         this->open(filename, mode, bClassic);
+    }
+
+    NetCDFStatDataSetFile::NetCDFStatDataSetFile(const std::string &filename,
+            DataSet &oSet, bool bClassic /*= true*/) :
+    NetCDFDataGroup(nullptr) {
+        if (this->open(filename, statdata::mode_replace, bClassic)) {
+            this->read_from(oSet);
+        }
     }
 
     NetCDFStatDataSetFile::~NetCDFStatDataSetFile() {
