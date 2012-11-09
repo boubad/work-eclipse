@@ -97,7 +97,7 @@ public:
 		return (this->compute_double(n, p));
 	} // compute
 	template<typename T>
-	bool compute(std::valarray<T> &odata) {
+	bool compute(const std::valarray<T> &odata) {
 		const size_t n = odata.size();
 		assert(n > 1);
 		std::unique_ptr<double>  oTemp(new double[n]);
