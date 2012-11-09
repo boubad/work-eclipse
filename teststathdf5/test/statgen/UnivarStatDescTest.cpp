@@ -148,6 +148,7 @@ protected:
     static std::vector<std::string> m_varnames;
     static std::string m_filename;
     static std::string m_outfilename;
+    static const double TEST_DATA[];
 };
 /////////////////////////////////////////////
 size_t UnivarStatDescTest::m_nrows = 0;
@@ -157,7 +158,92 @@ std::valarray<float> UnivarStatDescTest::m_valdata;
 std::vector<std::string> UnivarStatDescTest::m_varnames;
 std::string UnivarStatDescTest::m_filename("./data/testdata.tsv");
 std::string UnivarStatDescTest::m_outfilename("./testresults/univarstatdesc.txt");
+const double UnivarStatDescTest::TEST_DATA[] = {
+    3.0, 7.0, 9.0, 4.0, 11.0, 9.0, 6.0, 10.0, 5.0, 17.0, 7.0, 8.0
+};
 ////////////////////////////////////////////
+
+TEST_F(UnivarStatDescTest, test_clearvalues_ptr) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    std::map<size_t, double> oMap;
+    UnivarStatDesc::clear_values(n, pData, oMap);
+    size_t nIndex = 9;
+    ASSERT_TRUE(!oMap.empty());
+    ASSERT_TRUE(oMap.find(nIndex) != oMap.end());
+    double valexpected = 17.0;
+    double val = oMap[nIndex];
+    ASSERT_DOUBLE_EQ(valexpected, val);
+}// test_clearvalues_ptr
+
+TEST_F(UnivarStatDescTest, test_clearvalues_vector) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    std::vector<double> data(pData, pData + n);
+    std::map<size_t, double> oMap;
+    UnivarStatDesc::clear_values(data, oMap);
+    size_t nIndex = 9;
+    ASSERT_TRUE(!oMap.empty());
+    ASSERT_TRUE(oMap.find(nIndex) != oMap.end());
+    double valexpected = 17.0;
+    double val = oMap[nIndex];
+    ASSERT_DOUBLE_EQ(valexpected, val);
+}// test_clearvalues_vector
+
+TEST_F(UnivarStatDescTest, test_clearvalues_valarray) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    std::valarray<double> data(pData, n);
+    std::map<size_t, double> oMap;
+    UnivarStatDesc::clear_values(data, oMap);
+    size_t nIndex = 9;
+    ASSERT_TRUE(!oMap.empty());
+    ASSERT_TRUE(oMap.find(nIndex) != oMap.end());
+    double valexpected = 17.0;
+    double val = oMap[nIndex];
+    ASSERT_DOUBLE_EQ(valexpected, val);
+}// test_clearvalues_valarray
+
+TEST_F(UnivarStatDescTest, test_reject_ptr) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    double valr = 17.0;
+    double valn = 11.0;
+    bool bRet = UnivarStatDesc::must_reject(n, pData, valr);
+    ASSERT_TRUE(bRet);
+    bRet = UnivarStatDesc::must_reject(n, pData, valn);
+    ASSERT_TRUE(!bRet);
+}// test_reject_ptr
+
+TEST_F(UnivarStatDescTest, test_reject_vector) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    double valr = 17.0;
+    double valn = 11.0;
+    std::vector<double> data(pData, pData + n);
+    bool bRet = UnivarStatDesc::must_reject(data, valr);
+    ASSERT_TRUE(bRet);
+    bRet = UnivarStatDesc::must_reject(data, valn);
+    ASSERT_TRUE(!bRet);
+}// test_reject_vector
+
+TEST_F(UnivarStatDescTest, test_reject_valarray) {
+    const size_t n = sizeof (TEST_DATA) / sizeof (double);
+    const double *pData = &(TEST_DATA[0]);
+    //
+    double valr = 17.0;
+    double valn = 11.0;
+    std::valarray<double> data(pData, n);
+    bool bRet = UnivarStatDesc::must_reject(data, valr);
+    ASSERT_TRUE(bRet);
+    bRet = UnivarStatDesc::must_reject(data, valn);
+    ASSERT_TRUE(!bRet);
+}// test_reject_valarray
 
 TEST_F(UnivarStatDescTest, test_compute_vector) {
     std::ofstream *pout = m_out.get();
