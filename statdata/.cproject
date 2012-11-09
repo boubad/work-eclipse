@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="intel.linux.x86_64.a.rel.905540964_13.0.0">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.a.rel.905540964_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings>
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/statdata"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/statdata/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="statdata" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ICCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="" id="intel.linux.x86_64.a.rel.905540964_13.0.0" name="Release" parent="intel.linux.x86_64.a.rel_13.0.0">
+					<folderInfo id="intel.linux.x86_64.a.rel.905540964._13.0.0" name="/" resourcePath="">
+						<toolChain id="intel.toolchain.linux.x86_64.a.rel.1609461609_13.0.0" name="Intel Toolchain for Static Library on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.a.rel_13.0.0">
+							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.a.rel_13.0.0.461829579" name="Platform.A.Release" osList="linux" superClass="intel.platform.linux.x86_64.a.rel_13.0.0"/>
+							<builder arguments="-k -j4" buildPath="${workspace_loc:/statdata/Release}" command="make" id="intel.builder.linux.x86_64.a.rel.2040038399_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.a.rel_13.0.0"/>
+							<tool id="intel.cpp.compilestep.linux.x86_64.a.rel.1176222380_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.a.rel_13.0.0">
+								<option id="intel.compilestep.language.ansi_conformance.202040473" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
+								<option id="intel.compilestep.data.OpenMP.10518973" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.compilestep.preprocessor.includedirectories.769515437" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/include}&quot;"/>
+								</option>
+								<option id="intel.compilestep.preprocessor.defsym.616500172" name="Preprocessor Definitions (-D)" superClass="intel.compilestep.preprocessor.defsym" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="NDEBUG"/>
+								</option>
+								<option id="intel.compilestep.optimization.ip.974921568" name="Enable Interprocedural Optimization for Single File Compilation (-ip)" superClass="intel.compilestep.optimization.ip" value="true" valueType="boolean"/>
+								<option id="intel.compilestep.optimization.inline.expand1.464073112" name="Inline Function Expansion" superClass="intel.compilestep.optimization.inline.expand1" value="inl.exp1.anysuitable" valueType="enumerated"/>
+								<option id="intel.compilestep.optimization.parallel.1958492541" name="Parallelization (-parallel)" superClass="intel.compilestep.optimization.parallel" value="true" valueType="boolean"/>
+								<option id="intel.compilestep.opt.matmul.1792508959" name="Optimize Matrix Multiplication" superClass="intel.compilestep.opt.matmul" value="matmul.enable" valueType="enumerated"/>
+								<inputType id="intel.cpp.compilestep.input.489026571" superClass="intel.cpp.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.compilestep.linux.x86_64.a.rel.1372125861_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.a.rel_13.0.0">
+								<inputType id="intel.c.compilestep.input.312045116" superClass="intel.c.compilestep.input"/>
+							</tool>
+							<tool id="intel.arstep.linux.x86_64.a.rel.929881233_13.0.0" name="Intel Intel(R) 64 Archiver" superClass="intel.arstep.linux.x86_64.a.rel_13.0.0"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src|include" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="intel.linux.x86_64.a.dbg.581992719_13.0.0">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.a.dbg.581992719_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings>
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/statdata"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/statdata/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="statdata" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ICCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="a" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" cleanCommand="rm -rf" description="" id="intel.linux.x86_64.a.dbg.581992719_13.0.0" name="Debug" parent="intel.linux.x86_64.a.dbg_13.0.0">
+					<folderInfo id="intel.linux.x86_64.a.dbg.581992719._13.0.0" name="/" resourcePath="">
+						<toolChain id="intel.toolchain.linux.x86_64.a.dbg.1107878622_13.0.0" name="Intel Toolchain for Static Library on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.a.dbg_13.0.0">
+							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.a.dbg_13.0.0.2146183684" name="Platform.A.Debug" osList="linux" superClass="intel.platform.linux.x86_64.a.dbg_13.0.0"/>
+							<builder arguments="-k -j4" buildPath="${workspace_loc:/statdata/Debug}" command="make" id="intel.builder.linux.x86_64.a.dbg.67758619_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.a.dbg_13.0.0"/>
+							<tool id="intel.cpp.compilestep.linux.x86_64.a.dbg.1081451560_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.a.dbg_13.0.0">
+								<option id="intel.compilestep.language.ansi_conformance.215681780" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
+								<option id="intel.compilestep.data.OpenMP.1689363447" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.compilestep.preprocessor.includedirectories.1735736831" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/include}&quot;"/>
+								</option>
+								<inputType id="intel.cpp.compilestep.input.606590081" superClass="intel.cpp.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.compilestep.linux.x86_64.a.dbg.1894247588_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.a.dbg_13.0.0">
+								<inputType id="intel.c.compilestep.input.2076653200" superClass="intel.c.compilestep.input"/>
+							</tool>
+							<tool id="intel.arstep.linux.x86_64.a.dbg.502196119_13.0.0" name="Intel Intel(R) 64 Archiver" superClass="intel.arstep.linux.x86_64.a.dbg_13.0.0"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="src|include" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="statdata.intel.linux.a.2.594457177" name="Static Library" projectType="intel.linux.a.2"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/statdata"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/statdata"/>
+		</configuration>
+	</storageModule>
+</cproject>

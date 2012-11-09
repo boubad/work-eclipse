@@ -44,11 +44,11 @@ tmp/**/*
 **/.externalToolBuilders/
 
 # Locally stored "Eclipse launch configurations"
-**/*.launch
+# **/*.launch
 
 # CDT-specific
-**/.cproject
-**/.project
+# **/.cproject
+# **/.project
 
 # PDT-specific
 **/.buildpath

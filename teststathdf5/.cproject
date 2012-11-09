@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="intel.linux.x86_64.exe.rel.966177211_13.0.0">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.exe.rel.966177211_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ICCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="intel.linux.x86_64.exe.rel.966177211_13.0.0" name="Release" parent="intel.linux.x86_64.exe.rel_13.0.0">
+					<folderInfo id="intel.linux.x86_64.exe.rel.966177211._13.0.0" name="/" resourcePath="">
+						<toolChain id="intel.toolchain.linux.x86_64.exe.rel.1524526299_13.0.0" name="Intel Toolchain for Executable on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.exe.rel_13.0.0">
+							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.exe.rel_13.0.0.1478152366" name="Platform.Executable.Release" osList="linux" superClass="intel.platform.linux.x86_64.exe.rel_13.0.0"/>
+							<builder buildPath="${workspace_loc:/teststathdf5/Release}" id="intel.builder.linux.x86_64.exe.rel.1695411924_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.rel_13.0.0"/>
+							<tool id="intel.cpp.compilestep.linux.x86_64.exe.rel.441429742_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.exe.rel_13.0.0">
+								<option id="intel.compilestep.language.ansi_conformance.1611948353" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
+								<option id="intel.compilestep.data.OpenMP.104599075" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.compilestep.preprocessor.includedirectories.1322669197" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statdata/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stateigen/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stathdf5/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statnetcdf/include}&quot;"/>
+								</option>
+								<option id="intel.compilestep.preprocessor.defsym.1329087600" name="Preprocessor Definitions (-D)" superClass="intel.compilestep.preprocessor.defsym" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="NDEBUG"/>
+								</option>
+								<option id="intel.compilestep.optimization.ip.695505514" name="Enable Interprocedural Optimization for Single File Compilation (-ip)" superClass="intel.compilestep.optimization.ip" value="true" valueType="boolean"/>
+								<option id="intel.compilestep.optimization.ipo.451331813" name="Enable Whole Program Optimization (-ipo)" superClass="intel.compilestep.optimization.ipo" value="true" valueType="boolean"/>
+								<option id="intel.compilestep.optimization.inline.expand1.680707344" name="Inline Function Expansion" superClass="intel.compilestep.optimization.inline.expand1" value="inl.exp1.anysuitable" valueType="enumerated"/>
+								<option id="intel.compilestep.optimization.parallel.2062604872" name="Parallelization (-parallel)" superClass="intel.compilestep.optimization.parallel" value="true" valueType="boolean"/>
+								<option id="intel.compilestep.opt.matmul.1147698036" name="Optimize Matrix Multiplication" superClass="intel.compilestep.opt.matmul" value="matmul.enable" valueType="enumerated"/>
+								<inputType id="intel.cpp.compilestep.input.1320022194" superClass="intel.cpp.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.compilestep.linux.x86_64.exe.rel.663879404_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.exe.rel_13.0.0">
+								<inputType id="intel.c.compilestep.input.86057974" superClass="intel.c.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.linkstep.linux.x86_64.exe.rel.1992373878_13.0.0" name="Intel Intel(R) 64 C Linker" superClass="intel.c.linkstep.linux.x86_64.exe.rel_13.0.0">
+								<option id="intel.linkstep.libname.1485824271" name="Additional Libraries (-l)" superClass="intel.linkstep.libname" valueType="libs">
+									<listOptionValue builtIn="false" value="gtest"/>
+									<listOptionValue builtIn="false" value="stateigen"/>
+									<listOptionValue builtIn="false" value="stathdf5"/>
+									<listOptionValue builtIn="false" value="statnetcdf"/>
+									<listOptionValue builtIn="false" value="statdata"/>
+									<listOptionValue builtIn="false" value="statgen"/>
+									<listOptionValue builtIn="false" value="boost_serialization"/>
+									<listOptionValue builtIn="false" value="hdf5"/>
+									<listOptionValue builtIn="false" value="netcdf"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
+							</tool>
+							<tool id="intel.cpp.linkstep.linux.x86_64.exe.rel.1516787077_13.0.0" name="Intel Intel(R) 64 C++ Linker" superClass="intel.cpp.linkstep.linux.x86_64.exe.rel_13.0.0">
+								<option id="intel.linkstep.libname.1988507896" name="Additional Libraries (-l)" superClass="intel.linkstep.libname" valueType="libs">
+									<listOptionValue builtIn="false" value="gtest"/>
+									<listOptionValue builtIn="false" value="stateigen"/>
+									<listOptionValue builtIn="false" value="stathdf5"/>
+									<listOptionValue builtIn="false" value="statnetcdf"/>
+									<listOptionValue builtIn="false" value="statdata"/>
+									<listOptionValue builtIn="false" value="statgen"/>
+									<listOptionValue builtIn="false" value="boost_serialization"/>
+									<listOptionValue builtIn="false" value="hdf5"/>
+									<listOptionValue builtIn="false" value="netcdf"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
+								<option id="intel.linkstep.libpath.1491045126" name="Search Directory for Libraries (-L)" superClass="intel.linkstep.libpath" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statnetcdf/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stathdf5/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stateigen/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statdata/Release}&quot;"/>
+								</option>
+								<option id="intel.linkstep.options.OpenMP.2062517809" name="Process OpenMP Directives" superClass="intel.linkstep.options.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.linkstep.parallel.631323528" name="Parallelization (-parallel)" superClass="intel.linkstep.parallel" value="true" valueType="boolean"/>
+								<inputType id="intel.linkstep.input.935919700" superClass="intel.linkstep.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="intel.linux.x86_64.exe.dbg.31874248_13.0.0">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="intel.linux.x86_64.exe.dbg.31874248_13.0.0" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.ICCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="intel.linux.x86_64.exe.dbg.31874248_13.0.0" name="Debug" parent="intel.linux.x86_64.exe.dbg_13.0.0">
+					<folderInfo id="intel.linux.x86_64.exe.dbg.31874248._13.0.0" name="/" resourcePath="">
+						<toolChain id="intel.toolchain.linux.x86_64.exe.dbg.1010157434_13.0.0" name="Intel Toolchain for Executable on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.exe.dbg_13.0.0">
+							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.exe.dbg_13.0.0.1781700451" name="Platform.Executable.Debug" osList="linux" superClass="intel.platform.linux.x86_64.exe.dbg_13.0.0"/>
+							<builder buildPath="${workspace_loc:/teststathdf5/Debug}" id="intel.builder.linux.x86_64.exe.dbg.1525506436_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.dbg_13.0.0"/>
+							<tool id="intel.cpp.compilestep.linux.x86_64.exe.dbg.42289354_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.exe.dbg_13.0.0">
+								<option id="intel.compilestep.language.ansi_conformance.1614051968" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
+								<option id="intel.compilestep.data.OpenMP.1392539700" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.compilestep.preprocessor.includedirectories.1561940869" name="Additional Include Directories (-I)" superClass="intel.compilestep.preprocessor.includedirectories" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statdata/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stateigen/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stathdf5/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statnetcdf/include}&quot;"/>
+								</option>
+								<inputType id="intel.cpp.compilestep.input.452798533" superClass="intel.cpp.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.compilestep.linux.x86_64.exe.dbg.1077518827_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.exe.dbg_13.0.0">
+								<inputType id="intel.c.compilestep.input.445893068" superClass="intel.c.compilestep.input"/>
+							</tool>
+							<tool id="intel.c.linkstep.linux.x86_64.exe.dbg.1682000127_13.0.0" name="Intel Intel(R) 64 C Linker" superClass="intel.c.linkstep.linux.x86_64.exe.dbg_13.0.0">
+								<option id="intel.linkstep.libname.784226289" name="Additional Libraries (-l)" superClass="intel.linkstep.libname" valueType="libs">
+									<listOptionValue builtIn="false" value="gtest"/>
+									<listOptionValue builtIn="false" value="stateigen"/>
+									<listOptionValue builtIn="false" value="stathdf5"/>
+									<listOptionValue builtIn="false" value="statnetcdf"/>
+									<listOptionValue builtIn="false" value="statdata"/>
+									<listOptionValue builtIn="false" value="statgen"/>
+									<listOptionValue builtIn="false" value="boost_serialization"/>
+									<listOptionValue builtIn="false" value="hdf5"/>
+									<listOptionValue builtIn="false" value="netcdf"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
+							</tool>
+							<tool id="intel.cpp.linkstep.linux.x86_64.exe.dbg.143366159_13.0.0" name="Intel Intel(R) 64 C++ Linker" superClass="intel.cpp.linkstep.linux.x86_64.exe.dbg_13.0.0">
+								<option id="intel.linkstep.libname.1861153446" name="Additional Libraries (-l)" superClass="intel.linkstep.libname" valueType="libs">
+									<listOptionValue builtIn="false" value="gtest"/>
+									<listOptionValue builtIn="false" value="stateigen"/>
+									<listOptionValue builtIn="false" value="stathdf5"/>
+									<listOptionValue builtIn="false" value="statnetcdf"/>
+									<listOptionValue builtIn="false" value="statdata"/>
+									<listOptionValue builtIn="false" value="statgen"/>
+									<listOptionValue builtIn="false" value="boost_serialization"/>
+									<listOptionValue builtIn="false" value="hdf5"/>
+									<listOptionValue builtIn="false" value="netcdf"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
+								<option id="intel.linkstep.libpath.1210002402" name="Search Directory for Libraries (-L)" superClass="intel.linkstep.libpath" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statnetcdf/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stathdf5/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statgen/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stateigen/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/statdata/Debug}&quot;"/>
+								</option>
+								<option id="intel.linkstep.options.OpenMP.1309196612" name="Process OpenMP Directives" superClass="intel.linkstep.options.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<inputType id="intel.linkstep.input.2107898882" superClass="intel.linkstep.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="teststathdf5.intel.linux.executable.2.1755378524" name="Executable" projectType="intel.linux.executable.2"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope"/>
+</cproject>
