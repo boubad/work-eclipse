@@ -222,6 +222,7 @@ namespace statdata {
         const T den = (T) ((nr > 1) ? nr - 1 : nr);
         std::valarray<T> oTemp(nr * nv);
         for (size_t ivar = 0; ivar < nv; ++ivar) {
+            oCorr[ivar * nv + ivar] = (T) 1.0;
             std::valarray<X> v0 = oSrc[std::slice(ivar, nr, nv)];
             std::valarray<T> vi(nr);
             for (size_t i = 0; i < nr; ++i) {
@@ -235,16 +236,14 @@ namespace statdata {
             const T eci = (T) std::sqrt(tii.sum() / den);
             if (eci > 0) {
                 oStds[ivar] = eci;
-                for (size_t jvar = 0; jvar <= ivar; ++jvar) {
+                for (size_t jvar = 0; jvar < ivar; ++jvar) {
                     const T ecj = oStds[jvar];
                     if (ecj > 0) {
                         std::valarray<T> tj = oTemp[std::slice(jvar, nr, nv)];
                         std::valarray<T> tij = ti * tj;
                         T corr = (T) ((tij.sum() / den) / (eci * ecj));
                         oCorr[ivar * nv + jvar] = corr;
-                        if (ivar != jvar) {
-                            oCorr[jvar * nv + ivar] = corr;
-                        }
+                        oCorr[jvar * nv + ivar] = corr;
                     } // ecj
                 } // jvar
             } // eci
