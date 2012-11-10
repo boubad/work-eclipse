@@ -4,16 +4,21 @@ Description:
         Libraries statdata and statgen tests
 
 Dependencies:
-            projects statgen, statdata
+            projects statgen, statdata, stateigen, stathdf5, statnetcdf
 
 External dependencies:
-            cppunit, gtest, hdh5 library, posix threads (linux)
+            boost_serialization,cppunit, gtest, hdh5 library, posix threads (linux)
 
 Global compiler switches:
             -std=c++11 or -std=c++0x
             -fopenmp
+            
 Global include directories:
             ../statgen/include
             ../statdata/include
+            ../stateigen/include
+            ../stathdf5/include
+            ../statnetcdf/include
+            
 if NO_GTEST is defined, cppunit is used else gtest is used
 
