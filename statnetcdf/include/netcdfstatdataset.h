@@ -247,12 +247,12 @@ namespace statdata {
                 std::map<size_t, boost::any> xMap;
                 const std::string &varname = varnames[i];
                 if (this->get_variable_valuemap(varname, xMap)) {
-                    std::map<size_t, Value, std::less<size_t>, ALLOCP1> oMap;
+                    std::map<size_t, boost::any, std::less<size_t>, ALLOCP1> oMap;
                     for (auto it = oSet.begin(); it != oSet.end(); ++it) {
                         size_t curindex = *it;
                         auto jt = xMap.find(curindex);
                         if (jt != xMap.end()) {
-                            const Value &v = xMap[curindex];
+                            const boost::any &v = xMap[curindex];
                             oMap[curindex] = v;
                         }
                     } // it
