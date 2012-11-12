@@ -72,7 +72,7 @@
 							<builder arguments="-k -j4" buildPath="${workspace_loc:/statgen/Debug}" command="make" id="intel.builder.linux.x86_64.a.dbg.1141216651_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.a.dbg_13.0.0"/>
 							<tool id="intel.cpp.compilestep.linux.x86_64.a.dbg.721813388_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.a.dbg_13.0.0">
 								<option id="intel.compilestep.language.ansi_conformance.782996701" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
-								<option id="intel.compilestep.data.OpenMP.1203748164" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
+								<option id="intel.compilestep.data.OpenMP.1203748164" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
 								<inputType id="intel.cpp.compilestep.input.390413534" superClass="intel.cpp.compilestep.input"/>
 							</tool>
 							<tool id="intel.c.compilestep.linux.x86_64.a.dbg.332780508_13.0.0" name="Intel Intel(R) 64 C Compiler" superClass="intel.c.compilestep.linux.x86_64.a.dbg_13.0.0">

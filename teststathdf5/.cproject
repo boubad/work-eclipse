@@ -15,7 +15,7 @@
 					<folderInfo id="intel.linux.x86_64.exe.rel.966177211._13.0.0" name="/" resourcePath="">
 						<toolChain id="intel.toolchain.linux.x86_64.exe.rel.1524526299_13.0.0" name="Intel Toolchain for Executable on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.exe.rel_13.0.0">
 							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.exe.rel_13.0.0.1478152366" name="Platform.Executable.Release" osList="linux" superClass="intel.platform.linux.x86_64.exe.rel_13.0.0"/>
-							<builder buildPath="${workspace_loc:/teststathdf5/Release}" id="intel.builder.linux.x86_64.exe.rel.1695411924_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.rel_13.0.0"/>
+							<builder arguments="-k -j4" buildPath="${workspace_loc:/teststathdf5/Release}" command="make" id="intel.builder.linux.x86_64.exe.rel.1695411924_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.rel_13.0.0"/>
 							<tool id="intel.cpp.compilestep.linux.x86_64.exe.rel.441429742_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.exe.rel_13.0.0">
 								<option id="intel.compilestep.language.ansi_conformance.1611948353" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
 								<option id="intel.compilestep.data.OpenMP.104599075" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
@@ -104,7 +104,7 @@
 					<folderInfo id="intel.linux.x86_64.exe.dbg.31874248._13.0.0" name="/" resourcePath="">
 						<toolChain id="intel.toolchain.linux.x86_64.exe.dbg.1010157434_13.0.0" name="Intel Toolchain for Executable on Intel(R) 64" superClass="intel.toolchain.linux.x86_64.exe.dbg_13.0.0">
 							<targetPlatform archList="x86_64" binaryParser="org.eclipse.cdt.core.ELF" id="intel.platform.linux.x86_64.exe.dbg_13.0.0.1781700451" name="Platform.Executable.Debug" osList="linux" superClass="intel.platform.linux.x86_64.exe.dbg_13.0.0"/>
-							<builder buildPath="${workspace_loc:/teststathdf5/Debug}" id="intel.builder.linux.x86_64.exe.dbg.1525506436_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.dbg_13.0.0"/>
+							<builder arguments="-k -j4" buildPath="${workspace_loc:/teststathdf5/Debug}" command="make" id="intel.builder.linux.x86_64.exe.dbg.1525506436_13.0.0" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Intel Builder" superClass="intel.builder.linux.x86_64.exe.dbg_13.0.0"/>
 							<tool id="intel.cpp.compilestep.linux.x86_64.exe.dbg.42289354_13.0.0" name="Intel Intel(R) 64 C++ Compiler " superClass="intel.cpp.compilestep.linux.x86_64.exe.dbg_13.0.0">
 								<option id="intel.compilestep.language.ansi_conformance.1614051968" name="ANSI Conformance" superClass="intel.compilestep.language.ansi_conformance" value="ansi_conformance.8" valueType="enumerated"/>
 								<option id="intel.compilestep.data.OpenMP.1392539700" name="Process OpenMP Directives" superClass="intel.compilestep.data.OpenMP" value="openmp.2" valueType="enumerated"/>
@@ -178,5 +178,12 @@
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/teststathdf5"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/teststathdf5"/>
+		</configuration>
+	</storageModule>
 </cproject>
