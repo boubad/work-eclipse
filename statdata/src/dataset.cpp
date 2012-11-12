@@ -9,8 +9,10 @@
 /////////////////////////////
 #include <boost/algorithm/string.hpp>
 ///////////////////////////////////////
+#ifndef NO_SERIALIZATION
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#endif
 //////////////////////////////////
 namespace statdata {
     //////////////////////////////////
@@ -19,11 +21,15 @@ namespace statdata {
     }
 
     DataSet::DataSet(const std::string &filename, bool bIsArchiveFile /* = true */) {
+#ifndef NO_SERIALIZATION        
         if (bIsArchiveFile) {
             this->import_archive_file(filename);
         } else {
             this->import_csv_file(filename);
         }
+#else
+        this->import_csv_file(filename);
+#endif
     }
 
     DataSet::DataSet(size_t nVars, size_t nRows) {
@@ -779,33 +785,6 @@ namespace statdata {
         return (true);
     }// import_csv_file
 
-    bool DataSet::import_archive_file(const std::string &filename) {
-        {
-            // create and open an archive for input
-            std::ifstream ifs(filename.c_str());
-            if (!ifs.is_open()) {
-                return (false);
-            }
-            boost::archive::text_iarchive ia(ifs);
-            DataSet oSet;
-            ia >> oSet;
-            *this = oSet;
-            // archive and stream closed when destructors are called
-        }
-        return (true);
-    }// import_archive_file
-
-    bool DataSet::import_archive_stream(std::istream &ifs) {
-        {
-            boost::archive::text_iarchive ia(ifs);
-            DataSet oSet;
-            ia >> oSet;
-            *this = oSet;
-            // archive and stream closed when destructors are called
-        }
-        return (true);
-    }// import_archive_file
-
     bool DataSet::save_csv_file(const std::string &filename) {
         // create and open a character archive for output
         std::ofstream ofs(filename.c_str());
@@ -815,7 +794,7 @@ namespace statdata {
         return (this->save_csv_stream(ofs));
     }// save_csv_file
 
-    bool DataSet::save_csv_stream(std::ostream &os)  {
+    bool DataSet::save_csv_stream(std::ostream &os) {
         const std::vector<Variable> &vars = this->m_vars;
         std::vector<std::string> varnames;
         for (auto it = vars.begin(); it != vars.end(); ++it) {
@@ -857,6 +836,35 @@ namespace statdata {
         }// irow
         return (true);
     }// save_csv_file
+#ifndef NO_SERIALIZATION     
+
+    bool DataSet::import_archive_file(const std::string &filename) {
+        {
+            // create and open an archive for input
+            std::ifstream ifs(filename.c_str());
+            if (!ifs.is_open()) {
+                return (false);
+            }
+            boost::archive::text_iarchive ia(ifs);
+            DataSet oSet;
+            ia >> oSet;
+            *this = oSet;
+            // archive and stream closed when destructors are called
+        }
+        return (true);
+    }// import_archive_file
+
+    bool DataSet::import_archive_stream(std::istream &ifs) {
+        {
+            boost::archive::text_iarchive ia(ifs);
+            DataSet oSet;
+            ia >> oSet;
+            *this = oSet;
+            // archive and stream closed when destructors are called
+        }
+        return (true);
+    }// import_archive_file
+
     bool DataSet::save_archive_stream(std::ostream &ofs) {
         {
             // save data to archive
@@ -868,14 +876,14 @@ namespace statdata {
             }
         }
         return (true);
-    }// save_archive_file
+    }// save_archive_stream
 
     bool DataSet::save_archive_file(const std::string &filename) {
         {
             // save data to archive
             {
                 std::ofstream ofs(filename.c_str());
-                if (!ofs.is_open()){
+                if (!ofs.is_open()) {
                     return (false);
                 }
                 boost::archive::text_oarchive oa(ofs);
@@ -886,5 +894,6 @@ namespace statdata {
         }
         return (true);
     }// save_archive_file
+#endif // NO_SERIALIZATION
     /////////////////////////////////////
 }// namespace statdata

@@ -14,17 +14,19 @@
 /////////////////////////////
 #include <boost/algorithm/string.hpp>
 ////////////////////////////////////////
+#ifndef NO_SERIALIZATION
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/string.hpp>
 ///////////////////////////////////////////
-#define STAT_SERIALZE_VERSION   1
+#endif
 /////////////////////////////////////////
 namespace statdata {
     /////////////////////////////////////
 
     class Variable {
+#ifndef NO_SERIALIZATION
     private:
         friend class boost::serialization::access;
 
@@ -59,6 +61,7 @@ namespace statdata {
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()
+#endif // NO_SERIALIZATION
     public:
 
         Variable() : m_index(-1), m_isactive(true), m_iscateg(false), m_isid(false), m_isname(false),
@@ -231,11 +234,10 @@ namespace statdata {
     }; // class Variable
     typedef Variable *PVariable;
 
-    //  BOOST_CLASS_VERSION(statdata::Variable, STAT_SERIALZE_VERSION )
-
     ////////////////////////////////////////
 
     class Individu {
+#ifndef NO_SERIALIZATION        
     private:
         friend class boost::serialization::access;
 
@@ -247,6 +249,7 @@ namespace statdata {
             ar & this-> m_id;
             ar & this-> m_name;
         }
+#endif // NO_SERIALIZATION
     public:
 
         Individu() : m_index(-1), m_isactive(true), m_issup(false) {
@@ -338,7 +341,6 @@ namespace statdata {
         std::string m_id;
         std::string m_name;
     }; // class Individu
-    //  BOOST_CLASS_VERSION(Individu,STAT_SERIALZE_VERSION )
     typedef Individu *PIndividu;
     /////////////////////////////////////////
 }// namespace statdata

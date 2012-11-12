@@ -164,6 +164,7 @@ std::string DataSetTest::m_starchivename("testresults/my_archive.txt");
 std::string DataSetTest::m_stimportfilename("./data/Groupes_GTE1.tsv");
 std::unique_ptr<DataSet> DataSetTest::m_oset;
 ///////////////////////////////////////
+#ifndef NO_SERIALIZATION
 
 TEST_F(DataSetTest, saveArchiveTest) {
     DataSet *pSet = m_oset.get();
@@ -187,6 +188,7 @@ TEST_F(DataSetTest, readArchiveTest) {
     bool bRet = oSet.import_archive_file(filename);
     ASSERT_TRUE(bRet);
 }//saveArchiveTest
+#endif // NO_SERIALIZATION
 
 TEST_F(DataSetTest, saveCSVTest) {
     DataSet *pSet = m_oset.get();
@@ -194,6 +196,22 @@ TEST_F(DataSetTest, saveCSVTest) {
     bool bRet = pSet->save_csv_file(m_stfilename);
     ASSERT_TRUE(bRet);
 }//saveArchiveTest
+
+TEST_F(DataSetTest, readCSVTest) {
+    std::string filename = m_stfilename;
+    {
+        std::ifstream in(filename.c_str());
+        if (!in.is_open()) {
+            DataSet *pSet = m_oset.get();
+            ASSERT_TRUE(pSet != nullptr);
+            bool bRet = pSet->save_csv_file(filename);
+            ASSERT_TRUE(bRet);
+        }
+    }
+    DataSet oSet;
+    bool bRet = oSet.import_csv_file(filename);
+    ASSERT_TRUE(bRet);
+}//readCSVTest
 #else
 ////////////////////////////////
 #include <cppunit/TestFixture.h>
