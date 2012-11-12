@@ -15,3 +15,14 @@ Functions:
 	Hierachical aggregation	
 
 Compiling details:
+
+File genrouts.h (templates only):
+	Inverse
+	MeanStd
+	Sort
+	Rank
+	Correlations
+	Normalize_Array
+	Compute_Distances
+	Recode
+	WriteIndexedArray
