@@ -19,13 +19,16 @@
 #include <set>
 #include <map>
 ///////////////////////////////////////////
+#ifndef NO_SERIALIZATION
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
+#endif
 ////////////////////////////////////////
 namespace statdata {
     //////////////////////////////////
 
     class DataSet {
+#ifndef NO_SERIALIZATION
     private:
         friend class boost::serialization::access;
 
@@ -392,6 +395,7 @@ namespace statdata {
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()
+#endif
     public:
         DataSet();
         explicit
@@ -689,21 +693,23 @@ namespace statdata {
         }
     public:
         void clear(void);
+        //
         bool import_csv_file(const std::string &filename);
-        bool import_archive_file(const std::string &filename);
         bool save_csv_file(const std::string &filename);
-        bool save_archive_file(const std::string &filename);
         bool import_csv_stream(std::istream &in);
-        bool import_archive_stream(std::istream &in);
         bool save_csv_stream(std::ostream &os);
+#ifndef NO_SERIALIZATION
+        bool import_archive_stream(std::istream &in);
         bool save_archive_stream(std::ostream &os);
+        bool save_archive_file(const std::string &filename);
+        bool import_archive_file(const std::string &filename);
+#endif
     protected:
         std::vector<Variable> m_vars;
         std::vector<Individu> m_inds;
         std::map<std::string, std::vector<boost::any> > m_data;
         boost::any m_emptyval;
     }; // class DataSet
-   // BOOST_CLASS_VERSION(DataSet, STAT_SERIALZE_VERSION )
     ///////////////////////////////////////
 }// namespace statdata
 /////////////////////////////////////

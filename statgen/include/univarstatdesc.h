@@ -469,7 +469,7 @@ namespace statdata {
 
         template<typename T, class ALLOCT, class ALLOCP>
         static void clear_values(const std::vector<T, ALLOCT> &initialData,
-        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, bool alpha =
+        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, double alpha =
         0.05) {
             oMap.clear();
             const size_t n0 = initialData.size();
@@ -548,7 +548,7 @@ namespace statdata {
 
         template<typename T, class ALLOCP>
         static void clear_values(const std::valarray<T> &initialData,
-        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, bool alpha =
+        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, double alpha =
         0.05) {
             oMap.clear();
             const size_t n0 = initialData.size();
@@ -627,7 +627,7 @@ namespace statdata {
 
         template<typename T, class ALLOCP>
         static void clear_values(size_t n0, const T *initialData,
-        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, bool alpha =
+        std::map<size_t, T, std::less<size_t>, ALLOCP> &oMap, double alpha =
         0.05) {
             assert(initialData != nullptr);
             oMap.clear();
