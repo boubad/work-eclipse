@@ -159,10 +159,11 @@ namespace statdata {
                     std::string sx = vec[i];
                     boost::erase_all(sx, "\"");
                     boost::trim(sx);
+                    std::string sxx = sx;
                     boost::to_upper(sx);
                     if ((!sx.empty()) && (sx != "?") && (sx != "N/A")
                             && (sx != "EMPTY")) {
-                        oCur[i] = sx;
+                        oCur[i] = sxx;
                     }
                 } // i
                 oArray.push_back(oCur);
@@ -209,10 +210,11 @@ namespace statdata {
                     std::wstring sx = vec[i];
                     boost::erase_all(sx, L"\"");
                     boost::trim(sx);
+                    std::wstring sxx = sx;
                     boost::to_upper(sx);
                     if ((!sx.empty()) && (sx != L"?") && (sx != L"N/A")
                             && (sx != L"EMPTY")) {
-                        oCur[i] = sx;
+                        oCur[i] = sxx;
                     }
                 } // i
                 oArray.push_back(oCur);
@@ -256,7 +258,7 @@ namespace statdata {
                 std::string varname = varnames[icol];
                 if (varname.empty()) {
                     std::stringstream os;
-                    os << "VAR" << (icol + 1);
+                    os << "var" << (icol + 1);
                     varname = os.str();
                 }
                 std::vector<boost::any, ALLOCV> data(nRows);
@@ -358,7 +360,7 @@ namespace statdata {
                 std::wstring varname = varnames[icol];
                 if (varname.empty()) {
                     std::wstringstream os;
-                    os << L"VAR" << (icol + 1);
+                    os << L"var" << (icol + 1);
                     varname = os.str();
                 }
                 std::vector<boost::any, ALLOCV> data(nRows);
