@@ -76,7 +76,7 @@ namespace statdata {
 
         Variable(const Variable &other) : m_index(other.m_index),
         m_isactive(other.m_isactive),
-        m_iscateg(other.m_iscateg), m_isid(other.m_isid), m_isname(false),
+        m_iscateg(other.m_iscateg), m_isid(other.m_isid), m_isname(other.m_isname),
         m_isweight(other.m_isweight), m_type(other.m_type),
         m_id(other.m_id), m_name(other.m_name) {
         }
