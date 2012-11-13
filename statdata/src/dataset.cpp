@@ -33,11 +33,6 @@ DataSet::DataSet(size_t nVars, size_t nRows) {
 	this->initialize(nVars, nRows);
 } // DataSet
 
-DataSet::DataSet(const DataSet &other) :
-		m_vars(other.m_vars), m_inds(other.m_inds), m_data(other.m_data) {
-
-}
-
 DataSet & DataSet::operator=(const DataSet &other) {
 	if (this != &other) {
 		this->m_vars = other.m_vars;
@@ -598,6 +593,11 @@ const Variable *DataSet::get_variable(const std::string &sId) const {
 	}
 	return (nullptr);
 } // get_variable
+
+DataSet::DataSet(const DataSet &other) :
+		m_vars(other.m_vars), m_inds(other.m_inds), m_data(other.m_data) {
+
+}
 
 Variable *DataSet::add_variable(const std::string &sId,
 		const std::string &sName) {

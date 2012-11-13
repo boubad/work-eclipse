@@ -170,6 +170,154 @@ std::string DataSetTest::m_starchivename("testresults/my_archive.txt");
 std::string DataSetTest::m_stimportfilename("./data/Groupes_GTE1.tsv");
 std::unique_ptr<DataSet> DataSetTest::m_oset;
 ///////////////////////////////////////
+TEST_F(DataSetTest, miscVarTest) {
+	DataSet *pSet = m_oset.get();
+	ASSERT_TRUE(pSet != nullptr);
+	//
+	size_t nc = pSet->nb_vars();
+	ASSERT_TRUE(nc > 0);
+	size_t nr = pSet->nb_indivs();
+	ASSERT_TRUE(nr > 0);
+	std::vector<std::string> varnames;
+	pSet->get_variables_ids(varnames);
+	ASSERT_EQ(nc, varnames.size());
+	//
+	std::string xname;
+	bool vRet = pSet->get_ids_variable(xname);
+	ASSERT_TRUE(vRet);
+	ASSERT_TRUE(!xname.empty());
+	std::vector<std::string> ids;
+	vRet = pSet->get_ids(ids);
+	ASSERT_TRUE(vRet);
+	ASSERT_EQ(nr, ids.size());
+	//
+	vRet = pSet->get_names_variable(xname);
+	ASSERT_TRUE(vRet);
+	ASSERT_TRUE(!xname.empty());
+	std::vector<std::string> names;
+	vRet = pSet->get_names(names);
+	ASSERT_TRUE(vRet);
+	ASSERT_EQ(nr, names.size());
+	//
+	vRet = pSet->get_weights_variable(xname);
+	ASSERT_TRUE(vRet);
+	ASSERT_TRUE(!xname.empty());
+	std::vector<float> weights;
+	vRet = pSet->get_weights(weights);
+	ASSERT_TRUE(vRet);
+	ASSERT_EQ(nr, weights.size());
+	//
+	for (size_t ivar = 0; ivar < nc; ++ivar) {
+		int iIndex = (int) ivar;
+		const std::string &varname = varnames[ivar];
+		const Variable *pVar1 = pSet->get_variable(varname);
+		ASSERT_TRUE(pVar1 != nullptr);
+		const Variable *pVar2 = pSet->get_variable(iIndex);
+		ASSERT_TRUE(pVar2 != nullptr);
+		ASSERT_EQ(pVar1, pVar2);
+		int iIndex2 = pSet->get_variable_index(varname);
+		ASSERT_EQ(iIndex, iIndex2);
+		std::vector<boost::any> *pdata = pSet->variable_data(varname);
+		ASSERT_TRUE(pdata != nullptr);
+		ASSERT_EQ(nr, pdata->size());
+		if (pVar1->get_type() == typeString) {
+			std::vector<std::string> vv;
+			vRet = pSet->get_data(varname, vv);
+			ASSERT_TRUE(vRet);
+			ASSERT_EQ(nr, vv.size());
+		} else if (pVar1->get_type() == typeBool) {
+			std::vector<bool> vv;
+			vRet = pSet->get_data(varname, vv);
+			ASSERT_TRUE(vRet);
+			ASSERT_EQ(nr, vv.size());
+		} else {
+			std::vector<float> vv;
+			vRet = pSet->get_data(varname, vv);
+			ASSERT_TRUE(vRet);
+			ASSERT_EQ(nr, vv.size());
+		}
+		statdata::DataType tt = pSet->get_variable_type(varname);
+		ASSERT_EQ(pVar1->get_type(), tt);
+	} // ivar
+	  //
+	{
+		std::vector<double> vdata(nr);
+		for (size_t i = 0; i < nr; ++i) {
+			vdata[i] = (double) (::rand() % 50);
+		} // i
+		std::string sid("testdata");
+		Variable *pVar = pSet->add_variable(sid, sid);
+		ASSERT_TRUE(pVar != nullptr);
+		pVar->set_type(statdata::typeDouble);
+		pVar->set_num_var(true);
+		bool bRet = pSet->set_data(sid, vdata);
+		ASSERT_TRUE(bRet);
+		const Variable *pVar1 = pSet->get_variable(sid);
+		ASSERT_TRUE(pVar1 != nullptr);
+		size_t n = pSet->nb_vars();
+		size_t nExpected = (size_t) (nc + 1);
+		ASSERT_EQ(nExpected, n);
+		int iIndex = pSet->get_variable_index(sid);
+		const Variable *pVar2 = pSet->get_variable(iIndex);
+		ASSERT_TRUE(pVar2 != nullptr);
+		ASSERT_EQ(pVar1, pVar2);
+		bRet = pSet->remove_variable(sid);
+		ASSERT_TRUE(bRet);
+		n = pSet->nb_vars();
+		ASSERT_EQ(nc, n);
+	}
+} //miscVarTest
+TEST_F(DataSetTest, miscIndTest) {
+	DataSet *pSet = m_oset.get();
+	ASSERT_TRUE(pSet != nullptr);
+	//
+	size_t nc = pSet->nb_vars();
+	ASSERT_TRUE(nc > 0);
+	size_t nr = pSet->nb_indivs();
+	ASSERT_TRUE(nr > 0);
+	std::vector<std::string> indnames;
+	pSet->get_indivs_ids(indnames);
+	ASSERT_EQ(nr, indnames.size());
+	for (size_t irow = 0; irow < nr; ++irow) {
+		int iIndex = (int) irow;
+		const std::string &sid = indnames[irow];
+		const Individu *pInd1 = pSet->get_indiv(sid);
+		ASSERT_TRUE(pInd1 != nullptr);
+		const Individu *pInd2 = pSet->get_indiv(iIndex);
+		ASSERT_TRUE(pInd2 != nullptr);
+		ASSERT_EQ(pInd1, pInd2);
+		int iIndex2 = pSet->get_indiv_index(sid);
+		ASSERT_EQ(iIndex, iIndex2);
+		std::map<std::string, boost::any> oMap1;
+		bool bRet = pSet->indiv_data(sid, oMap1);
+		ASSERT_TRUE(bRet);
+		ASSERT_EQ(nc, oMap1.size());
+		std::map<std::string, boost::any> oMap2;
+		bRet = pSet->indiv_data(iIndex, oMap2);
+		ASSERT_TRUE(bRet);
+		ASSERT_EQ(nc, oMap2.size());
+	} // ivar
+	  //
+	{
+		std::string sid("testind");
+		Individu *pInd = pSet->add_indiv(sid, sid);
+		ASSERT_TRUE(pInd != nullptr);
+		const Individu *pInd1 = pSet->get_indiv(sid);
+		ASSERT_TRUE(pInd1 != nullptr);
+		size_t n = pSet->nb_indivs();
+		size_t nExpected = (size_t) (nr + 1);
+		ASSERT_EQ(nExpected, n);
+		int iIndex = pSet->get_indiv_index(sid);
+		const Individu *pInd2 = pSet->get_indiv(iIndex);
+		ASSERT_TRUE(pInd2 != nullptr);
+		ASSERT_EQ(pInd1, pInd2);
+		bool bRet = pSet->remove_indiv(sid);
+		ASSERT_TRUE(bRet);
+		n = pSet->nb_indivs();
+		ASSERT_EQ(nr, n);
+	}
+} //miscIndTest
+////////////////////////////////////////////
 #ifndef NO_SERIALIZATION
 TEST_F(DataSetTest, saveArchiveTest) {
 	DataSet *pSet = m_oset.get();
