@@ -486,7 +486,7 @@ namespace statdata {
             const std::vector<Variable> &vv = this->m_vars;
             for (auto it = vv.begin(); it != vv.end(); ++it){
                  const Variable &v = *it;
-                 if (v.is_num_var() && (!v.is_num_var()) &&
+                 if (v.is_num_var() &&
                          (!v.is_name_var()) && (!v.is_weight_var())){
                      std::string sid = v.id();
                      data.push_back(sid);
