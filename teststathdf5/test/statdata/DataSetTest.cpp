@@ -10,7 +10,6 @@
 /////////////////////////////
 using namespace statdata;
 //////////////////////////////////////
-
 class DataSetTest: public ::testing::Test {
 public:
 

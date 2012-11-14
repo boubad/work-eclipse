@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <ctime>
 /////////////////////////
 #include <boost/any.hpp>
 ////////////////////////////
@@ -21,8 +22,10 @@ namespace statdata {
 
     class Value {
     public:
-        static std::ostream & to_stream(std::ostream &os, const boost::any &val);
-        static std::wostream & to_stream(std::wostream &os, const boost::any &val);
+        static std::ostream & to_stream(std::ostream &os, const boost::any &val,
+        		statdata::DataType type = typeOther);
+        static std::wostream & to_stream(std::wostream &os,
+        		const boost::any &val,statdata::DataType type = typeOther);
         static statdata::DataType get_type(const boost::any &v);
         //
         static bool get_value(const boost::any &v, bool &val);
@@ -42,6 +45,11 @@ namespace statdata {
         static bool get_value(const boost::any &v, long double &val);
         static bool get_value(const boost::any &v, std::string &val);
         static bool get_value(const boost::any &v, std::wstring &val);
+        //
+        static bool string2time(const std::string &s, time_t &val);
+        static bool string2time(const std::wstring &s, time_t &val);
+        static bool time2String(const time_t &t, std::string &val);
+        static bool time2String(const time_t &t, std::wstring &val);
     };
     // class Value
     typedef std::vector<boost::any> Values;

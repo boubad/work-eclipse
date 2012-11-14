@@ -110,6 +110,7 @@ namespace statdata {
         size_t startIndex = 0;
         size_t nCount = 0;
         std::map<std::string, Values> oMap;
+        std::map<std::string,statdata::DataType> oTypes;
         for (auto it = vars.begin(); it != vars.end(); ++it) {
             const NetCDFVariable &var = *it;
             const std::string &varname = var.name;
@@ -119,6 +120,7 @@ namespace statdata {
                 nCount = 0;
                 this->read_indiv_data(varname, vals, startIndex, nCount);
                 oMap[varname] = vals;
+                oTypes[varname] = var.type;
             }
         } // it
         for (auto it = oMap.begin(); it != oMap.end(); ++it) {
@@ -140,7 +142,8 @@ namespace statdata {
                 if (v.empty()) {
                     os << "N/A";
                 } else {
-                    Value::to_stream(os, v);
+                	statdata::DataType t = oTypes[varname];
+                    Value::to_stream(os, v,t);
                 }
             } // it
             os << std::endl;

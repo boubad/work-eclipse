@@ -904,7 +904,7 @@ namespace statdata {
                 if ((i != 0) && ((i % 10) == 0)) {
                     os << std::endl << "\t";
                 }
-                Value::to_stream(os, values[i]);
+                Value::to_stream(os, values[i],statdata::typeOther);
             } // i
             os << " ]" << std::endl;
             NetCDFDataGroup::NetCDFDataGroups groupes;

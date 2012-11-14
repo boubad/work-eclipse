@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fstream>
+#include <value.h>
 /////////////////////////////
 #include <boost/algorithm/string.hpp>
 ///////////////////////////////////////
@@ -814,13 +815,22 @@ bool DataSet::save_csv_stream(std::ostream &os) {
 				os << "\t";
 			}
 			std::string sid = varnames[ivar];
+			const Variable *pVar = this->get_variable(sid);
+			statdata::DataType tt = pVar->get_type();
 			std::string sres;
 			if (oMap.find(sid) != oMap.end()) {
 				auto &vv = oMap[sid];
 				if (irow < vv.size()) {
 					const boost::any &v = vv[irow];
-					if (!vv.empty()) {
-						Value::get_value(v, sres);
+					if (!v.empty()) {
+						if ((tt == typeDateTime) || (tt == typeDate)
+								|| (tt == typeTime)) {
+							time_t x;
+							Value::get_value(v, x);
+							Value::time2String(x, sres);
+						} else {
+							Value::get_value(v, sres);
+						}
 					}
 				}
 			}
