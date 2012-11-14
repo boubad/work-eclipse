@@ -129,9 +129,31 @@ protected:
 			bool bRet = pSet->set_data(sid, m_ststringdata);
 			ASSERT_TRUE(bRet);
 		}
-		ASSERT_EQ(10, pSet->nb_vars());
+		{
+			m_sttimedata.resize(nInds);
+			for (size_t i = 0; i < nInds; ++i) {
+				struct tm xtm;
+				::memset(&xtm, 0, sizeof(xtm));
+				int nYear = 2000 + (rand() % 10);
+				xtm.tm_year = nYear - 1900;
+				xtm.tm_mon = rand() % 12;
+				xtm.tm_mday = 1 + rand() % 27;
+				xtm.tm_hour = rand() % 24;
+				xtm.tm_min = rand() % 60;
+				xtm.tm_sec = rand() % 60;
+				time_t t = ::mktime(&xtm);
+				m_sttimedata[i] = t;
+			} // i
+			std::string sid("datetimedata");
+			Variable *pVar = pSet->add_variable(sid, sid);
+			ASSERT_TRUE(pVar != nullptr);
+			pVar->set_type(statdata::typeDateTime);
+			pVar->set_num_var(true);
+			bool bRet = pSet->set_data(sid, m_sttimedata);
+			ASSERT_TRUE(bRet);
+		}
+		ASSERT_EQ(11, pSet->nb_vars());
 	} //SetUpTestCase
-
 	static void TearDownTestCase() {
 		m_oset.reset();
 		m_stbooldata.clear();
@@ -141,6 +163,7 @@ protected:
 		m_stfloatdata.clear();
 		m_stdoubledata.clear();
 		m_ststringdata.clear();
+		m_sttimedata.clear();
 	} //TearDownTestCase
 protected:
 	static size_t m_st_nbindivs;
@@ -150,6 +173,7 @@ protected:
 	static std::vector<long> m_stlongdata;
 	static std::vector<float> m_stfloatdata;
 	static std::vector<double> m_stdoubledata;
+	static std::vector<time_t> m_sttimedata;
 	static std::vector<std::string> m_ststringdata;
 	static std::string m_starchivename;
 	static std::string m_stfilename;
@@ -168,6 +192,7 @@ std::string DataSetTest::m_stfilename("testresults/my_dataset.txt");
 std::string DataSetTest::m_starchivename("testresults/my_archive.txt");
 std::string DataSetTest::m_stimportfilename("./data/Groupes_GTE1.tsv");
 std::unique_ptr<DataSet> DataSetTest::m_oset;
+std::vector<time_t> DataSetTest::m_sttimedata;
 ///////////////////////////////////////
 TEST_F(DataSetTest, miscVarTest) {
 	DataSet *pSet = m_oset.get();
@@ -399,6 +424,8 @@ TEST_F(DataSetTest, readCSVTest) {
 	DataSet oSet;
 	bool bRet = oSet.import_csv_file(filename);
 	ASSERT_TRUE(bRet);
+	std::string time_sid("datetimedata");
+	oSet.change_variable_type(time_sid,statdata::typeDateTime);
 	std::vector<std::string> categ_varnames;
 	oSet.get_categ_vars_ids(categ_varnames);
 	ASSERT_TRUE(!categ_varnames.empty());

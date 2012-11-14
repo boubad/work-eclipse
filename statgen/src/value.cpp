@@ -23,95 +23,74 @@ bool Value::time2String(const time_t &t, std::string &val) {
 		return (false);
 	}
 	::memcpy(&m_tm, px, sizeof(m_tm));
-	std::stringstream os;
-	os << (m_tm.tm_year + 1900);
-	os << "-";
-	int n = m_tm.tm_mon;
-	n++;
-	if (n < 10) {
-		os << "0" << n;
-	} else {
-		os << n;
+	const size_t T_BUF = 255;
+	char buf[T_BUF + 1];
+	::memset(&(buf[0]),sizeof(buf),0);
+	int nYear = m_tm.tm_year + 1900;
+	int nMonth = m_tm.tm_mon + 1;
+	int nDay = m_tm.tm_mday;
+	int nHour = m_tm.tm_hour;
+	int nMinute = m_tm.tm_min;
+	int nSecond = m_tm.tm_sec;
+	bool bDate = false;
+	bool bTime = false;
+	if ((nYear != 1970) || (nMonth != 1) || (nDay != 1)) {
+		bDate = true;
 	}
-	os << "-";
-	n = m_tm.tm_mday;
-	if (n < 10) {
-		os << "0" << n;
-	} else {
-		os << n;
+	if ((nHour != 0) || (nMinute != 0) || (nSecond != 0)) {
+		bTime = true;
 	}
-	os << " ";
-	n = m_tm.tm_hour;
-	if (n < 10) {
-		os << "0" << n;
+	if (bDate && bTime){
+		::strftime(&(buf[0]),T_BUF,"%Y-%m-%d %H:%M:%S",&m_tm);
+	} else if ((bDate) && (!bTime)){
+		::strftime(&(buf[0]),T_BUF,"%Y-%m-%d",&m_tm);
+	} else if ((!bDate) && bTime){
+		::strftime(&(buf[0]),T_BUF,"%H:%M:%S",&m_tm);
 	} else {
-		os << n;
+		::strftime(&(buf[0]),T_BUF,"%Y-%m-%d %H:%M:%S",&m_tm);
 	}
-	os < ":";
-	n = m_tm.tm_min;
-	if (n < 10) {
-		os << "0" << n;
-	} else {
-		os << n;
-	}
-	os < ":";
-	n = m_tm.tm_sec;
-	if (n < 10) {
-		os << "0" << n;
-	} else {
-		os << n;
-	}
-	val = os.str();
+	val = &(buf[0]);
 	return (true);
 } // time2String
 bool Value::time2String(const time_t &t, std::wstring &val) {
 	val.clear();
-	struct tm m_tm;
-	struct tm *px = ::localtime(&t);
-	if (px == nullptr) {
-		return (false);
-	}
-	::memcpy(&m_tm, px, sizeof(m_tm));
-	std::wstringstream os;
-	os << (m_tm.tm_year + 1900);
-	os << L"-";
-	int n = m_tm.tm_mon;
-	n++;
-	if (n < 10) {
-		os << L"0" << n;
-	} else {
-		os << n;
-	}
-	os << L"-";
-	n = m_tm.tm_mday;
-	if (n < 10) {
-		os << L"0" << n;
-	} else {
-		os << n;
-	}
-	os << L" ";
-	n = m_tm.tm_hour;
-	if (n < 10) {
-		os << L"0" << n;
-	} else {
-		os << n;
-	}
-	os < L":";
-	n = m_tm.tm_min;
-	if (n < 10) {
-		os << L"0" << n;
-	} else {
-		os << n;
-	}
-	os < L":";
-	n = m_tm.tm_sec;
-	if (n < 10) {
-		os << L"0" << n;
-	} else {
-		os << n;
-	}
-	val = os.str();
-	return (true);
+		struct tm m_tm;
+		struct tm *px = ::localtime(&t);
+		if (px == nullptr) {
+			return (false);
+		}
+		::memcpy(&m_tm, px, sizeof(m_tm));
+		const size_t T_BUF = 255;
+		char buf[T_BUF + 1];
+		::memset(&(buf[0]),sizeof(buf),0);
+		int nYear = m_tm.tm_year + 1900;
+		int nMonth = m_tm.tm_mon + 1;
+		int nDay = m_tm.tm_mday;
+		int nHour = m_tm.tm_hour;
+		int nMinute = m_tm.tm_min;
+		int nSecond = m_tm.tm_sec;
+		bool bDate = false;
+		bool bTime = false;
+		if ((nYear != 1970) || (nMonth != 1) || (nDay != 1)) {
+			bDate = true;
+		}
+		if ((nHour != 0) || (nMinute != 0) || (nSecond != 0)) {
+			bTime = true;
+		}
+		if (bDate && bTime){
+			::strftime(&(buf[0]),T_BUF,"%Y-%m-%d %H:%M:%S",&m_tm);
+		} else if ((bDate) && (!bTime)){
+			::strftime(&(buf[0]),T_BUF,"%Y-%m-%d",&m_tm);
+		} else if ((!bDate) && bTime){
+			::strftime(&(buf[0]),T_BUF,"%H:%M:%S",&m_tm);
+		} else {
+			::strftime(&(buf[0]),T_BUF,"%Y-%m-%d %H:%M:%S",&m_tm);
+		}
+		std::string sx = &(buf[0]);
+		std::wstring sw(sx.length(),L' ');
+		std::copy(sx.begin(),sx.end(),sw.begin());
+		val = sw;
+		return (true);
 } // time2String
 bool Value::string2time(const std::string &s, time_t &val) {
 	val = (time_t) 0;
@@ -131,7 +110,11 @@ bool Value::string2time(const std::string &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::string syear(itstart, it);
 			std::stringstream in(syear);
-			in >> nYear;
+			if (*it == '-') {
+				in >> nYear;
+			} else {
+				in >> nHour;
+			}
 			while ((it != ss.end()) && (!std::isdigit(*it))) {
 				++it;
 			}
@@ -144,7 +127,11 @@ bool Value::string2time(const std::string &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::string smonth(itstart, it);
 			std::stringstream in(smonth);
-			in >> nMonth;
+			if (*it == '-') {
+				in >> nMonth;
+			} else {
+				in >> nMinute;
+			}
 			while ((it != ss.end()) && (!std::isdigit(*it))) {
 				++it;
 			}
@@ -157,7 +144,11 @@ bool Value::string2time(const std::string &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::string sday(itstart, it);
 			std::stringstream in(sday);
-			in >> nDay;
+			if (*it == '-') {
+				in >> nDay;
+			} else {
+				in >> nSecond;
+			}
 			while ((it != ss.end()) && (!std::isdigit(*it))) {
 				++it;
 			}
@@ -256,7 +247,11 @@ bool Value::string2time(const std::wstring &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::wstring syear(itstart, it);
 			std::wstringstream in(syear);
-			in >> nYear;
+			if (*it == L'-') {
+				in >> nYear;
+			} else {
+				in >> nHour;
+			}
 			++it;
 			itstart = it;
 			break;
@@ -267,7 +262,11 @@ bool Value::string2time(const std::wstring &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::wstring smonth(itstart, it);
 			std::wstringstream in(smonth);
-			in >> nMonth;
+			if (*it == L'-') {
+				in >> nMonth;
+			} else {
+				in >> nMinute;
+			}
 			++it;
 			itstart = it;
 			break;
@@ -278,7 +277,11 @@ bool Value::string2time(const std::wstring &s, time_t &val) {
 		if (!std::isdigit(*it)) {
 			std::wstring sday(itstart, it);
 			std::wstringstream in(sday);
-			in >> nDay;
+			if (*it == L'-') {
+				in >> nDay;
+			} else {
+				in >> nSecond;
+			}
 			++it;
 			itstart = it;
 			break;

@@ -30,7 +30,7 @@ namespace statdata {
 
 class CSVReader {
 public:
-	static bool is_date_time(const std::string &s) {
+	static bool is_date_time(const std::string &s, bool &bDate, bool &bTime) {
 		std::string ss = boost::trim_copy(s);
 		if (ss.empty()) {
 			return (false);
@@ -45,9 +45,11 @@ public:
 				++nColons;
 			}
 		} // it
-		return ((nColons == 2) && (nMinus == 2));
+		bDate = (nMinus == 2);
+		bTime = (nColons == 2);
+		return (bDate || bTime);
 	} // is_date_time
-	static bool is_date_time(const std::wstring &s) {
+	static bool is_date_time(const std::wstring &s, bool &bDate, bool &bTime) {
 		std::wstring ss = boost::trim_copy(s);
 		if (ss.empty()) {
 			return (false);
@@ -62,7 +64,9 @@ public:
 				++nColons;
 			}
 		} // it
-		return ((nColons == 2) && (nMinus == 2));
+		bDate = (nMinus == 2);
+		bTime = (nColons == 2);
+		return (bDate || bTime);
 	} // is_date_time
 	static void convert_string(const std::string &s, boost::any &v) {
 		v = boost::any();
@@ -101,7 +105,8 @@ public:
 			}
 		} // it
 		if (bDate) {
-			if (!is_date_time(ss)) {
+			bool bTime = false;
+			if (!is_date_time(ss, bDate, bTime)) {
 				v = ss;
 				return;
 			}
@@ -125,7 +130,70 @@ public:
 			v = ival;
 		}
 	} // convert_string
-
+	static void convert_string(const std::string &s, boost::any &v,
+			bool &bDateTime) {
+		v = boost::any();
+		std::string ss = boost::trim_copy(s);
+		boost::erase_all(ss, "\"");
+		if (ss.empty()) {
+			return;
+		}
+		std::string sx = boost::to_upper_copy(ss);
+		if ((sx == "N/A") || (sx == "?") || (sx == "NAN") || (sx == "EMPTY")) {
+			return;
+		}
+		bool bPoint = false;
+		bool bDate = false;
+		for (auto it = ss.begin(); it != ss.end(); ++it) {
+			auto c = *it;
+			if (c == ':') {
+				bDate = true;
+			} else if (std::isalpha(c)) {
+				if ((sx == "TRUE") || (sx == "VRAI") || (sx == "OUI")) {
+					v = true;
+					return;
+				} else if ((sx == "FALSE") || (sx == "FAUX") || (sx == "NON")) {
+					v = false;
+					return;
+				}
+				v = ss;
+				return;
+			} else if (!std::isdigit(c)) {
+				if (c == '.') {
+					bPoint = true;
+				} else if ((c != '-') && (c != '+') && (c != ':')) {
+					v = ss;
+					return;
+				}
+			}
+		} // it
+		if (bDate) {
+			bool bTime = false;
+			if (!is_date_time(ss, bDate, bTime)) {
+				v = ss;
+				return;
+			}
+			time_t t;
+			if (Value::string2time(ss, t)) {
+				v = t;
+				bDateTime = true;
+			} else {
+				v = ss;
+			}
+			return;
+		}
+		if (bPoint) {
+			double fval = std::numeric_limits<double>::min();
+			std::stringstream in(ss);
+			in >> fval;
+			v = fval;
+		} else {
+			int ival = std::numeric_limits<int>::min();
+			std::stringstream in(ss);
+			in >> ival;
+			v = ival;
+		}
+	} // convert_string
 	static void convert_string(const std::wstring &s, boost::any &v) {
 		v = boost::any();
 		std::wstring ss = boost::trim_copy(s);
@@ -165,7 +233,8 @@ public:
 			}
 		} // it
 		if (bDate) {
-			if (!is_date_time(ss)) {
+			bool bTime = false;
+			if (!is_date_time(ss, bDate, bTime)) {
 				v = ss;
 				return;
 			}
@@ -189,7 +258,72 @@ public:
 			v = ival;
 		}
 	} // convert_string
-
+	static void convert_string(const std::wstring &s, boost::any &v,
+			bool &bDateTime) {
+		v = boost::any();
+		std::wstring ss = boost::trim_copy(s);
+		boost::erase_all(ss, L"\"");
+		if (ss.empty()) {
+			return;
+		}
+		std::wstring sx = boost::to_upper_copy(ss);
+		if ((sx == L"N/A") || (sx == L"?") || (sx == L"NAN")
+				|| (sx == L"EMPTY")) {
+			return;
+		}
+		bool bPoint = false;
+		bool bDate = false;
+		for (auto it = ss.begin(); it != ss.end(); ++it) {
+			auto c = *it;
+			if (c == L':') {
+				bDate = true;
+			} else if (std::isalpha(c)) {
+				if ((sx == L"TRUE") || (sx == L"VRAI") || (sx == L"OUI")) {
+					v = true;
+					return;
+				} else if ((sx == L"FALSE") || (sx == L"FAUX")
+						|| (sx == L"NON")) {
+					v = false;
+					return;
+				}
+				v = ss;
+				return;
+			} else if (!std::isdigit(c)) {
+				if (c == L'.') {
+					bPoint = true;
+				} else if ((c != L'-') && (c != L'+') && (c != L':')) {
+					v = ss;
+					return;
+				}
+			}
+		} // it
+		if (bDate) {
+			bool bTime = false;
+			if (!is_date_time(ss, bDate, bTime)) {
+				v = ss;
+				return;
+			}
+			time_t t;
+			if (Value::string2time(ss, t)) {
+				v = t;
+				bDateTime = true;
+			} else {
+				v = ss;
+			}
+			return;
+		}
+		if (bPoint) {
+			double fval = std::numeric_limits<double>::min();
+			std::wstringstream in(ss);
+			in >> fval;
+			v = fval;
+		} else {
+			int ival = std::numeric_limits<int>::min();
+			std::wstringstream in(ss);
+			in >> ival;
+			v = ival;
+		}
+	} // convert_string
 	template<class ALLOCS, class ALLOCVEC>
 	static bool read_csv_file(std::istream &in,
 			std::vector<std::vector<std::string, ALLOCS>, ALLOCVEC> &oArray) {
@@ -207,7 +341,7 @@ public:
 				continue;
 			}
 			std::vector<std::string> vec;
-			boost::split(vec, s, boost::is_any_of("\t ,;"));
+			boost::split(vec, s, boost::is_any_of("\t,;"));
 			const size_t nx = vec.size();
 			if (nCols == 0) {
 				nCols = nx;
@@ -258,7 +392,7 @@ public:
 				continue;
 			}
 			std::vector<std::wstring> vec;
-			boost::split(vec, s, boost::is_any_of(L"\t ,;"));
+			boost::split(vec, s, boost::is_any_of(L"\t,;"));
 			const size_t nx = vec.size();
 			if (nCols == 0) {
 				nCols = nx;
@@ -324,25 +458,43 @@ public:
 			bool bFloat = false;
 			bool bInt = false;
 			bool bAlpha = false;
+			bool bDate = false;
 			for (size_t i = 1; i < nr; ++i) {
 				const std::vector<std::string> &vx = oVec[i];
 				const std::string &s = vx[icol];
 				boost::any v;
-				CSVReader::convert_string(s, v);
+				bool bDateTime = false;
+				CSVReader::convert_string(s, v, bDateTime);
 				if (!v.empty()) {
-					const std::type_info &tt = v.type();
-					if (tt == typeid(std::string)) {
-						bAlpha = true;
-					} else if (tt == typeid(double)) {
-						bFloat = true;
-					} else if (tt == typeid(int)) {
-						bInt = true;
+					if (bDateTime) {
+						bDate = true;
+					} else {
+						const std::type_info &tt = v.type();
+						if (tt == typeid(std::string)) {
+							bAlpha = true;
+						} else if (tt == typeid(double)) {
+							bFloat = true;
+						} else if (tt == typeid(int)) {
+							bInt = true;
+						}
 					}
 				}
 				size_t irow = (size_t) (i - 1);
 				data[irow] = v;
 			} // i
-			if (bAlpha) {
+			if (bDate) {
+				for (size_t i = 0; i < nRows; ++i) {
+					const boost::any &v = data[i];
+					if (!v.empty()) {
+						const std::type_info &tt = v.type();
+						if (tt != typeid(time_t)) {
+							time_t s;
+							Value::get_value(v, s);
+							data[i] = s;
+						}
+					}
+				} // i
+			} else if (bAlpha) {
 				for (size_t i = 0; i < nRows; ++i) {
 					const boost::any &v = data[i];
 					if (!v.empty()) {
@@ -426,31 +578,49 @@ public:
 			bool bFloat = false;
 			bool bInt = false;
 			bool bAlpha = false;
+			bool bDate = false;
 			for (size_t i = 1; i < nr; ++i) {
 				const std::vector<std::wstring> &vx = oVec[i];
 				const std::wstring &s = vx[icol];
 				boost::any v;
-				CSVReader::convert_string(s, v);
+				bool bDateTime = false;
+				CSVReader::convert_string(s, v, bDateTime);
 				if (!v.empty()) {
-					const std::type_info &tt = v.type();
-					if (tt == typeid(std::wstring)) {
-						bAlpha = true;
-					} else if (tt == typeid(double)) {
-						bFloat = true;
-					} else if (tt == typeid(int)) {
-						bInt = true;
+					if (bDateTime) {
+						bDate = true;
+					} else {
+						const std::type_info &tt = v.type();
+						if (tt == typeid(std::wstring)) {
+							bAlpha = true;
+						} else if (tt == typeid(double)) {
+							bFloat = true;
+						} else if (tt == typeid(int)) {
+							bInt = true;
+						}
 					}
 				}
 				size_t irow = (size_t) (i - 1);
 				data[irow] = v;
 			} // i
-			if (bAlpha) {
+			if (bDate) {
 				for (size_t i = 0; i < nRows; ++i) {
 					const boost::any &v = data[i];
 					if (!v.empty()) {
 						const std::type_info &tt = v.type();
-						if (tt != typeid(std::wstring)) {
-							std::wstring s;
+						if (tt != typeid(time_t)) {
+							time_t s;
+							Value::get_value(v, s);
+							data[i] = s;
+						}
+					}
+				} // i
+			} else if (bAlpha) {
+				for (size_t i = 0; i < nRows; ++i) {
+					const boost::any &v = data[i];
+					if (!v.empty()) {
+						const std::type_info &tt = v.type();
+						if (tt != typeid(std::string)) {
+							std::string s;
 							Value::get_value(v, s);
 							data[i] = s;
 						}

@@ -17,7 +17,6 @@
 //////////////////////////////////
 namespace statdata {
 //////////////////////////////////
-
 DataSet::DataSet() {
 }
 
@@ -190,13 +189,13 @@ bool DataSet::change_variable_type(const std::string &sId,
 	return (false);
 } // change_variable_type
 
-statdata::DataType DataSet::get_variable_type(const std::string &sId) {
+statdata::DataType DataSet::get_variable_type(const std::string &sId) const {
 	std::string sid = boost::to_lower_copy(boost::trim_copy(sId));
 	if (sid.empty()) {
 		return (statdata::typeOther);
 	}
 	for (auto it = this->m_vars.begin(); it != this->m_vars.end(); ++it) {
-		Variable &v = *it;
+		const Variable &v = *it;
 		std::string s = v.id();
 		if ((s == sId) && (this->m_data.find(sid) != this->m_data.end())) {
 			return (v.get_type());

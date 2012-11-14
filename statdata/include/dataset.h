@@ -593,7 +593,39 @@ public:
 		} // it
 		return (false);
 	} // get_weights
-
+	template <class ALLOCT>
+	bool get_data(const std::string &sId, std::vector<std::string, ALLOCT> &data) const {
+		data.clear();
+		std::string sid = boost::to_lower_copy(boost::trim_copy(sId));
+		if (sid.empty()) {
+			return (false);
+		}
+		statdata::DataType tt = this->get_variable_type(sid);
+		for (auto it = this->m_data.begin(); it != this->m_data.end(); ++it) {
+			if ((*it).first == sid) {
+				auto vv = (*it).second;
+				size_t n = vv.size();
+				if (n > 0) {
+					data.resize(n);
+					for (size_t i = 0; i < n; ++i) {
+						std::string v;
+						const boost::any &vx = vv[i];
+						if (!vx.empty()) {
+							if ((tt == typeDateTime)|| (tt == typeDate) || (tt == typeTime)) {
+								time_t tx;
+								Value::get_value(vx,tx);
+								Value::time2String(tx,v);
+							} else if (Value::get_value(vv[i], v)) {
+								data[i] = v;
+							}
+						} // not empty
+					} // i
+				} // n
+				return (true);
+			} // found
+		} // it
+		return (false);
+	} // get_data
 	template <typename T, class ALLOCT>
 	bool get_data(const std::string &sId, std::vector<T, ALLOCT> &data) const {
 		data.clear();
@@ -697,7 +729,7 @@ public:
 	} // set_all_data
 	void initialize(size_t nVars, size_t nRows);
 	bool change_variable_type(const std::string &sId, statdata::DataType rtype);
-	statdata::DataType get_variable_type(const std::string &sId);
+	statdata::DataType get_variable_type(const std::string &sId) const;
 public:
 
 	boost::any operator()(int indindex, int varindex) {
